@@ -77,7 +77,7 @@ construct_entry <-  function(lexadb = NULL,
 
     lx_id <- generate_lx_id(lexadb)
   } else {
-    lx_id <- generate_lx_id()
+    lx_id <- generate_lx_id(NULL)
   }
 
   today <- as.character(Sys.time())
