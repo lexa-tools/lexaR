@@ -20,7 +20,7 @@ generate_lx_id <- function(lexadb) {
 
 generate_cl_id <- function(lexadb) {
   db_path <- attr(lexadb, "meta")$path
-  cl_files <- list.files(file.path(db_path, "sentences"), pattern = "*.yaml")
+  cl_files <- list.files(file.path(db_path, "collections"), pattern = "*.yaml")
   if (length(cl_files) > 0) {
     last_id <- as.integer(
       as.hexmode(stringr::str_sub(cl_files[[length(cl_files)]], 4, 9))

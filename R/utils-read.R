@@ -23,7 +23,7 @@ read_grammar <- function(path) {
 }
 
 read_collections <- function(path) {
-  collections_path <- file.path(path, "sentences")
+  collections_path <- file.path(path, "collections")
   collections_files <- list.files(collections_path, full.names = TRUE)
   collections <- lapply(collections_files, function(collection) {
       cl <- yaml::read_yaml(collection)

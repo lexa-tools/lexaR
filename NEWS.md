@@ -2,7 +2,7 @@
 
 ## Breaking
 
-- Now "texts" are sentences "collections". This means that the folder `texts` is now called `sentences` and each yaml file name should be `cl_00000n.yaml`.
+- Now "texts" are sentences "collections". This means that the folder `texts` is now called `collections` and each yaml file name should be `cl_00000n.yaml`.
 
 ## Added
 

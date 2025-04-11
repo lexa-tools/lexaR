@@ -115,7 +115,7 @@ show_collection <- function(lexadb, coll_id, sent_id = NULL) {
   }
 
   cl_path <- file.path(
-    normalizePath(db_path), "sentences",
+    normalizePath(db_path), "collections",
     paste0(coll_id, ".yaml")
   )
 

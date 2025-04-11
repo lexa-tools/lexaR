@@ -20,7 +20,7 @@ write_lexicon <- function(lexadb, lexalx) {
 
 write_collection <- function(lexadb, cl_entry) {
   db_path <- attr(lexadb, "meta")$path
-  cl_path <- file.path("sentences", paste0(cl_entry$id, ".yaml"))
+  cl_path <- file.path("collections", paste0(cl_entry$id, ".yaml"))
   cl_full_path <- file.path(db_path, cl_path)
   readr::write_file(cl_entry$out, cl_full_path)
 }

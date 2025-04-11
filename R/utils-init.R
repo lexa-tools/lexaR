@@ -23,9 +23,9 @@ init_grammar <- function(path) {
 }
 
 init_collections <- function(path) {
-  dir.create(file.path(path, "sentences"), FALSE, TRUE)
+  dir.create(file.path(path, "collections"), FALSE, TRUE)
   cl_example <- construct_collection()
-  yaml::write_yaml(cl_example$out, file.path(path, "sentences", "cl_000001.yaml"))
+  yaml::write_yaml(cl_example$out, file.path(path, "collections", "cl_000001.yaml"))
 }
 
 # Write entry helpers ----

@@ -25,7 +25,7 @@ A Lexa database (`lexadb`) is a directory containing the following files/dirs:
 - `config.yaml`: the database configuration file.
 - `grammar.yaml`: the grammar specification file.
 - `lexicon/`: directory containing Lexa lexicon files.
-- `sentences/`: directory containing Lexa sentence collections (`lexacl`).
+- `collections/`: directory containing Lexa sentence collections (`lexacl`).
 
 You can find examples of Lexa databases as part of the lexa package (<https://github.com/stefanocoretta/lexa/tree/main/inst/extdata>).
 
@@ -89,7 +89,7 @@ date_modified: <date>
 
 ## Text schema
 
-Texts are located in the `sentences/` folder.
+Texts are located in the `collections/` folder.
 Each text is saved in a separate `.yaml` file.
 
 ```yaml

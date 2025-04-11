@@ -155,7 +155,7 @@ print.lexalx <- function(x, ...) {
       if (length(examples_id) == 1) {
         cl_st <- stringr::str_split(examples_id, ":")
         collection <- yaml::read_yaml(
-          file.path(attr(x, "dbpath"), "sentences", paste0(cl_st[[1]][1], ".yaml"))
+          file.path(attr(x, "dbpath"), "collections", paste0(cl_st[[1]][1], ".yaml"))
         )
         sentence <- collection$sentences[[cl_st[[1]][2]]]
 
@@ -180,7 +180,7 @@ print.lexalx <- function(x, ...) {
         for (ex in seq_len(length(examples_id))) {
           cl_st <- stringr::str_split(examples_id[[ex]], ":")
           collection <- yaml::read_yaml(
-            file.path(attr(x, "dbpath"), "sentences", paste0(cl_st[[1]][1], ".yaml"))
+            file.path(attr(x, "dbpath"), "collections", paste0(cl_st[[1]][1], ".yaml"))
           )
           sentence <- collection$sentences[[cl_st[[1]][2]]]
           cli::cli_text(

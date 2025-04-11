@@ -27,7 +27,7 @@ typeset_gloss <- function(lexadb, collection, sentence, format = "latex") {
   }
 
   db_path <- attr(lexadb, "meta")$path
-  collection <- yaml::read_yaml(file.path(db_path, "sentences", paste0(collection, ".yaml")))
+  collection <- yaml::read_yaml(file.path(db_path, "collections", paste0(collection, ".yaml")))
 
   sentence_i <- collection$sentences[[sentence]]$sentence
   transcr <- collection$sentences[[sentence]]$transcription
