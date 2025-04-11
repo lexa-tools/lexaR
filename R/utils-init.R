@@ -47,6 +47,24 @@ construct_entry <-  function(lexadb = NULL,
                           notes = NULL,
                           homophone = NULL) {
   
+  # Write default examples if mandatory fields are NULL
+  # Used when initialising lexadb
+  if (is.null(lexeme)) {
+    lexeme = "lexeme"
+  }
+  if (is.null(part_of_speech)) {
+    part_of_speech = "noun"
+  }
+  if (is.null(morph_category)) {
+    morph_category = "lexical"
+  }
+  if (is.null(morph_type)) {
+    morph_type = "stem"
+  }
+  if (is.null(gloss)) {
+    gloss = "lexeme"
+  }
+  
   if (!is.null(lexadb)) {
     db_path <- attr(lexadb, "meta")$path
     entries <- lapply(
@@ -90,7 +108,7 @@ construct_entry <-  function(lexadb = NULL,
     morph_category = morph_category,
     morph_type = morph_type,
     part_of_speech = part_of_speech,
-    inflectional_features = list(class = ""),
+    inflectional_features = list(class = NULL),
     etymology = etymology,
     notes = notes,
     homophone = homophone,
