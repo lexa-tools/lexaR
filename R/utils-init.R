@@ -46,7 +46,7 @@ construct_entry <-  function(lexadb = NULL,
                           etymology = NULL,
                           notes = NULL,
                           homophone = NULL) {
-
+  
   if (!is.null(lexadb)) {
     db_path <- attr(lexadb, "meta")$path
     entries <- lapply(
@@ -112,9 +112,23 @@ construct_entry <-  function(lexadb = NULL,
     date_modified = today
   )
 
+  # Drop null fields
+  out <- remove_null_fields(out)
+
   entry <- list(id = lx_id, out = out)
   return(entry)
 
+}
+
+
+# Remove null fields
+
+remove_null_fields <- function(x) {
+  if (is.list(x)) {
+    x <- lapply(x, remove_nulls_and_empty)
+    x <- x[!sapply(x, function(y) is.null(y) || (is.list(y) && length(y) == 0))]
+  }
+  x
 }
 
 # Prepare empty collection skeleton.
