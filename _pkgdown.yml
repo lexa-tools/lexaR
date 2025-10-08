@@ -1,7 +1,7 @@
 url: https://stefanocoretta.github.io/lexa/
 template:
   bootstrap: 5
-  theme: flatly
+  bootswatch: flatly
 development:
   mode: auto
 
