@@ -1,6 +1,6 @@
 id: lx_000006
 lexeme: urųrtose
-phon: uryrtose
+phonemic: uryrtose
 morph_category: lexical
 morph_type: root
 part_of_speech: verb
@@ -10,11 +10,11 @@ allomorphs:
   al_01:
     id: al_01
     morph: ųrt
-    phon: yrt
+    phonemic: yrt
   al_02:
     id: al_02
     morph: urųrt
-    phon: uryrt
+    phonemic: uryrt
 senses:
   se_01:
     id: se_01
@@ -23,5 +23,5 @@ senses:
     examples:
     - cl_000001:st_000001
     - cl_000001:st_000002
-date_created: 2024-02-07 21:54:25.137478
-date_modified: 2024-02-07 21:54:25.154112
+date_created: 2024-02-07T21:54:25Z
+date_modified: 2024-02-07T21:54:25Z

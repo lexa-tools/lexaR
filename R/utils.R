@@ -44,7 +44,7 @@ validate_lexicon <- function(lexadb) {
       entry_json <- jsonlite::toJSON(entry, auto_unbox = TRUE)
       validated <- jsonvalidate::json_validate(
         entry_json,
-        system.file("extdata/json_schemas/lx_schema.json", package = "lexaR"),
+        system.file("extdata/json_schemas/lx-schema.json", package = "lexaR"),
         verbose = FALSE,
         engine = "ajv"
       )
