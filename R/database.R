@@ -33,7 +33,7 @@ create_lexadb <- function(parent = ".", name) {
 #' @export
 #'
 #' @examples
-#' db_path <- system.file("extdata/albanian_lexadb", package = "lexa")
+#' db_path <- system.file("extdata/albanian_lexadb", package = "lexaR")
 #' albanian <- load_lexadb(db_path)
 #' albanian
 #'

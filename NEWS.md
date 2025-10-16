@@ -1,8 +1,12 @@
-# lexa 0.0.3.9000
+# lexaR 0.0.3.9000
 
 ## Breaking
 
 - Now "texts" are sentences "collections". This means that the folder `texts` is now called `collections` and each yaml file name should be `cl_00000n.yaml`.
+
+- The lexa database schema is now developed at <https://github.com/lexa-tools/lexa-schema>.
+
+- No longer supporting Rmarkdown. Please use Quarto and the [interlinear](https://github.com/stefanocoretta/interlinear) package.
 
 ## Added
 

@@ -39,7 +39,7 @@ remotes::install_github(
 To create a new database:
 
 ``` r
-library(lexa)
+library(lexaR)
 
 create_lexadb(
   parent = "./",
@@ -48,7 +48,7 @@ create_lexadb(
 ```
 
 This will create a directory `new_lexadb/` in the parent directory
-(`./`). See `vignette("database-schema", package = "lexa")` for details.
+(`./`). See `vignette("database-schema", package = "lexaR")` for details.
 
 The `lexicon/` folder is populated with a file with an entry skeleton
 you can manually edit.
@@ -74,7 +74,7 @@ files.
 To search your lexicon:
 
 ``` r
-db_path <- system.file("extdata/eleryon_lexadb", package = "lexa")
+db_path <- system.file("extdata/eleryon_lexadb", package = "lexaR")
 eleryon <- load_lexadb(db_path)
 #> ℹ Loading lexa database...
 eleryon

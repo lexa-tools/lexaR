@@ -11,10 +11,10 @@
 lexa_pdf <- function(...) {
   rmarkdown::pdf_document(
     ...,
-    template = system.file("rmarkdown/templates/lexa_pdf/resources/template.tex", package = "lexa"),
+    template = system.file("rmarkdown/templates/lexa_pdf/resources/template.tex", package = "lexaR"),
     includes = rmarkdown::includes(
-      in_header = system.file("rmarkdown/templates/lexa_pdf/resources/preamble.tex", package = "lexa"),
-      after_body = system.file("rmarkdown/templates/lexa_pdf/resources/after-body.tex", package = "lexa")
+      in_header = system.file("rmarkdown/templates/lexa_pdf/resources/preamble.tex", package = "lexaR"),
+      after_body = system.file("rmarkdown/templates/lexa_pdf/resources/after-body.tex", package = "lexaR")
     )
   )
 }
@@ -30,8 +30,8 @@ lexa_html <- function(...) {
   rmarkdown::html_document(
     ...,
     includes = rmarkdown::includes(
-      in_header = system.file("rmarkdown/templates/lexa_html/resources/head.html", package = "lexa"),
-      after_body = system.file("rmarkdown/templates/lexa_html/resources/foot.html", package = "lexa")
+      in_header = system.file("rmarkdown/templates/lexa_html/resources/head.html", package = "lexaR"),
+      after_body = system.file("rmarkdown/templates/lexa_html/resources/foot.html", package = "lexaR")
     )
   )
 }

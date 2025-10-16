@@ -78,7 +78,7 @@ add_entry <- function(lexadb,
 #' @export
 #'
 #' @examples
-#' db_path <- system.file("extdata/eleryon_lexadb", package = "lexa")
+#' db_path <- system.file("extdata/eleryon_lexadb", package = "lexaR")
 #' eleryon <- load_lexadb(db_path)
 #'
 #' # Search for "chǭs"
@@ -155,7 +155,7 @@ search_lexicon <- function(lexadb,
 #' @export
 #'
 #' @examples
-#' db_path <- system.file("extdata/eleryon_lexadb", package = "lexa")
+#' db_path <- system.file("extdata/eleryon_lexadb", package = "lexaR")
 #' eleryon <- load_lexadb(db_path)
 #'
 #' show_entry(eleryon, 6)

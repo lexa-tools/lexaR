@@ -19,7 +19,7 @@ A \code{lexalx} object.
 It shows the entry with the given id.
 }
 \examples{
-db_path <- system.file("extdata/eleryon_lexadb", package = "lexa")
+db_path <- system.file("extdata/eleryon_lexadb", package = "lexaR")
 eleryon <- load_lexadb(db_path)
 
 show_entry(eleryon, 6)

@@ -22,7 +22,7 @@ A \code{lexast} object.
 It shows the collection or sentence with the given id.
 }
 \examples{
-db_path <- system.file("extdata/albanian_lexadb", package = "lexa")
+db_path <- system.file("extdata/albanian_lexadb", package = "lexaR")
 albanian <- load_lexadb(db_path)
 
 show_collection(albanian, 1)

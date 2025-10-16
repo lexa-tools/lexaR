@@ -41,7 +41,7 @@ add_collection <- function(lexadb,
 #' @export
 #'
 #' @examples
-#' db_path <- system.file("extdata/albanian_lexadb", package = "lexa")
+#' db_path <- system.file("extdata/albanian_lexadb", package = "lexaR")
 #' albanian <- load_lexadb(db_path)
 #'
 #' search_collections(albanian, "rrezet")
@@ -101,7 +101,7 @@ search_collections <- function(lexadb, word = NULL, whole = TRUE, gloss = NULL) 
 #' @export
 #'
 #' @examples
-#' db_path <- system.file("extdata/albanian_lexadb", package = "lexa")
+#' db_path <- system.file("extdata/albanian_lexadb", package = "lexaR")
 #' albanian <- load_lexadb(db_path)
 #'
 #' show_collection(albanian, 1)

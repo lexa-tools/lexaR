@@ -22,7 +22,7 @@ A list of \code{lexalx} objects.
 Search words in the sentence collections.
 }
 \examples{
-db_path <- system.file("extdata/albanian_lexadb", package = "lexa")
+db_path <- system.file("extdata/albanian_lexadb", package = "lexaR")
 albanian <- load_lexadb(db_path)
 
 search_collections(albanian, "rrezet")

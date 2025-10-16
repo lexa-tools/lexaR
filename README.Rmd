@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
-library(lexa)
+library(lexaR)
 ```
 
 # lexa: Manage documentary and descriptive linguistic data <a href="https://stefanocoretta.github.io/lexa/"><img src="man/figures/logo.png" align="right" height="120" /></a>
@@ -50,7 +50,7 @@ remotes::install_github(
 To create a new database:
 
 ``` r
-library(lexa)
+library(lexaR)
 
 create_lexadb(
   parent = "./",
@@ -59,7 +59,7 @@ create_lexadb(
 ```
 
 This will create a directory `new_lexadb/` in the parent directory (`./`).
-See `vignette("database-schema", package = "lexa")` for details.
+See `vignette("database-schema", package = "lexaR")` for details.
 
 The `lexicon/` folder is populated with a file with an entry skeleton you can manually edit.
 
@@ -83,7 +83,7 @@ The new `id` is automatically created for you based on the existing files.
 To search your lexicon:
 
 ```{r}
-db_path <- system.file("extdata/eleryon_lexadb", package = "lexa")
+db_path <- system.file("extdata/eleryon_lexadb", package = "lexaR")
 eleryon <- load_lexadb(db_path)
 eleryon
 

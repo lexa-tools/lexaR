@@ -34,7 +34,7 @@ A list of \code{lexalx} objects.
 Search entries in the lexicon, by entry form or sense definitions.
 }
 \examples{
-db_path <- system.file("extdata/eleryon_lexadb", package = "lexa")
+db_path <- system.file("extdata/eleryon_lexadb", package = "lexaR")
 eleryon <- load_lexadb(db_path)
 
 # Search for "chǭs"

@@ -1,4 +1,4 @@
-Package: lexa
+Package: lexaR
 Type: Package
 Title: Lexicon and texts database management
 Version: 0.0.3.9000
@@ -32,5 +32,5 @@ Imports:
     usethis,
     lifecycle
 VignetteBuilder: knitr
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)

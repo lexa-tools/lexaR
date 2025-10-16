@@ -46,7 +46,7 @@ construct_entry <-  function(lexadb = NULL,
                           etymology = NULL,
                           notes = NULL,
                           homophone = NULL) {
-  
+
   # Write default examples if mandatory fields are NULL
   # Used when initialising lexadb
   if (is.null(lexeme)) {
@@ -64,7 +64,7 @@ construct_entry <-  function(lexadb = NULL,
   if (is.null(gloss)) {
     gloss = "lexeme"
   }
-  
+
   if (!is.null(lexadb)) {
     db_path <- attr(lexadb, "meta")$path
     entries <- lapply(
@@ -143,7 +143,8 @@ construct_entry <-  function(lexadb = NULL,
 
 remove_null_fields <- function(x) {
   if (is.list(x)) {
-    x <- lapply(x, remove_nulls_and_empty)
+    # Following commented line makes no sense
+    # x <- lapply(x, remove_nulls_and_empty)
     x <- x[!sapply(x, function(y) is.null(y) || (is.list(y) && length(y) == 0))]
   }
   x
