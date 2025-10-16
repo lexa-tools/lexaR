@@ -111,15 +111,15 @@ print.lexalx <- function(x, ...) {
   } else {
     lexeme_part <- lexeme
   }
-  if (!is.null(x$phon)) {
-    if (length(x$phon) == 2 ){
-      phon <- x$phon$pht
+  if (!is.null(x$phonetic)) {
+    if (length(x$phonetic) > 1 ) {
+      phonetic <- x$phonetic[[1]]
     } else {
-      phon <- x$phon
+      phonetic <- x$phonetic
     }
 
     lexeme_line <- paste(lexeme_part,
-    "[{phon}] {.emph {crayon::green(x$part_of_speech)}}")
+    "[{phonetic}] {.emph {crayon::green(x$part_of_speech)}}")
 
   } else {
     lexeme_line <- paste(lexeme_part,
@@ -223,7 +223,7 @@ print.lexalx <- function(x, ...) {
     morph_line <- paste(
       "{cli::col_red(cli::symbol$bullet)}",
       morph_part,
-      "[{x$allomorphs[[allo]]$phon}]
+      "[{x$allomorphs[[allo]]$phonetic}]
       {ifelse(!is.null(conditioning), paste0('(',
       cli::col_green(conditioning$type), ': ',
       conditioning$context, ')'), '')}"
@@ -314,7 +314,7 @@ print.lexast <- function(x, ...) {
   if (!is.null(x$transliteration)) {
     cli::cli_text(cli::col_blue(x$transliteration))
   }
-  cli::cli_text("[", x$phon, "]")
+  cli::cli_text("[", x$phonetic, "]")
   cli::cli_text("")
 
   morph_split <- unlist(stringr::str_split(stringr::str_squish(x$morph), " "))
