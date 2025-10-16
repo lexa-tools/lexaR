@@ -10,7 +10,7 @@
 #' @param lexeme The entry as a string.
 #' @param gloss The gloss as a string.
 #' @param part_of_speech The part of speech as a string.
-#' @param phon The phonetic transcription as a string.
+#' @param phonetic The phonetic transcription as a string.
 #' @param morph_category The morphosyntactic category as a string
 #'    (`"lexical"` or `"grammatical"`).
 #' @param morph_type The type of morpheme as a string.
@@ -26,7 +26,7 @@ add_entry <- function(lexadb,
                       lexeme = NULL,
                       gloss = NULL,
                       part_of_speech = NULL,
-                      phon = NULL,
+                      phonetic = NULL,
                       morph_category = NULL,
                       morph_type = NULL,
                       definition = gloss,
@@ -40,7 +40,7 @@ add_entry <- function(lexadb,
     lexeme = lexeme,
     gloss = gloss,
     part_of_speech = part_of_speech,
-    phon = phon,
+    phonetic = phonetic,
     morph_category = morph_category,
     morph_type = morph_type,
     definition = definition,

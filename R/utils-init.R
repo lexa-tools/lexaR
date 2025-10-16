@@ -39,7 +39,7 @@ construct_entry <-  function(lexadb = NULL,
                           lexeme = NULL,
                           gloss = NULL,
                           part_of_speech = NULL,
-                          phon = NULL,
+                          phonetic = NULL,
                           morph_category = NULL,
                           morph_type = NULL,
                           definition = gloss,
@@ -104,11 +104,11 @@ construct_entry <-  function(lexadb = NULL,
   out <- list(
     id = lx_id,
     lexeme = lexeme,
-    phon = phon,
+    phonetic = phonetic,
     morph_category = morph_category,
     morph_type = morph_type,
     part_of_speech = part_of_speech,
-    inflectional_features = list(class = NULL),
+    # inflectional_features = list(class = NULL),
     etymology = etymology,
     notes = notes,
     homophone = homophone,
@@ -116,7 +116,7 @@ construct_entry <-  function(lexadb = NULL,
       al_01 = list(
         id = "al_01",
         morph = lexeme,
-        phon = phon
+        phonetic = phonetic
       )
     ),
     senses = list(
@@ -163,10 +163,9 @@ construct_collection <- function(lexadb = NULL, title = NULL) {
       st_000001 = list(
         id = "st_000001",
         sentence = NULL,
-        transcription = NULL,
-        morpho = NULL,
+        morphemes = NULL,
         gloss = NULL,
-        phon = NULL,
+        phonetic = NULL,
         translation = NULL
       )
     )

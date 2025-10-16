@@ -9,7 +9,7 @@ add_entry(
   lexeme = NULL,
   gloss = NULL,
   part_of_speech = NULL,
-  phon = NULL,
+  phonetic = NULL,
   morph_category = NULL,
   morph_type = NULL,
   definition = gloss,
@@ -28,7 +28,7 @@ add_entry(
 
 \item{part_of_speech}{The part of speech as a string.}
 
-\item{phon}{The phonetic transcription as a string.}
+\item{phonetic}{The phonetic transcription as a string.}
 
 \item{morph_category}{The morphosyntactic category as a string
 (\code{"lexical"} or \code{"grammatical"}).}
