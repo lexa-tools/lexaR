@@ -1,7 +1,10 @@
 id: lx_000001
 lexeme:
-  hira: ろっしゃ
-  translit: rossha
+  hira:
+    - ろっしゃ
+    - transcription: rossha
+    - transliteration: roQshya
+  romaji: rossha
 phonemic: roʃʃa
 phonetic: ɽɔʃʃa
 morph_category: lexical
@@ -11,8 +14,11 @@ allomorphs:
   al_01:
     id: al_01
     morph:
-      hira: ろっしゃ
-      transliteration: rossha
+      hira:
+        - ろっしゃ
+        - transcription: rossha
+        - transliteration: roQshya
+      romaji: rossha
     phonetic: ɽɔʃʃa
 senses:
   se_01:
@@ -22,8 +28,11 @@ senses:
       jpn: 昼飯
     definition:
       bro:
-        hira: "うって「おん「ふおい「さんの"
-        translit: "utte on foi sanno"
+        hira:
+          - "うって「おん「ふおい「さんの"
+          - transcription: "utte on foi sanno"
+          - transliteration: "uQte on fuoi sanno"
+        romaji: "utte on foi sanno"
       eng: "lunch, midday meal"
       jpn: "昼食、昼間に食べる食事"
     examples:

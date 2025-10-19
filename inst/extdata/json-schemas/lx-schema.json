@@ -11,7 +11,7 @@
                     "type": "string"
                 },
                 {
-                    "type": "object"
+                    "$ref": "#/definitions/writing"
                 }
             ]
         },
@@ -74,7 +74,7 @@
                                     "type": "string"
                                 },
                                 {
-                                    "type": "object"
+                                    "$ref": "#/definitions/writing"
                                 }
                             ]
                         },
@@ -250,5 +250,33 @@
         "date_created",
         "date_modified"
     ],
-    "additionalProperties": false
+    "additionalProperties": false,
+    "definitions": {
+        "writing": {
+            "type": "object",
+            "additionalProperties": {
+                "oneOf": [
+                    {
+                        "type": "string"
+                    },
+                    {
+                    "type": "array",
+                    "minItems": 2,
+                    "items": [
+                        { "type": "string" } 
+                    ],
+                    "contains": {
+                        "type": "object",
+                        "properties": {
+                        "transliteration": { "type": "string" },
+                        "transcription": { "type": "string" }
+                        },
+                        "minProperties": 1,
+                        "additionalProperties": false
+                    }
+                    }
+                ]
+            }
+        }
+    }
 }
