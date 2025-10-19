@@ -97,7 +97,7 @@ print.lexadb <- function(x, ...) {
 #'
 #' @return Nothing. Used for its side effects.
 #' @export
-print.lexalx <- function(x, ...) {
+print.lexalx <- function(x, writing = NULL, ...) {
   dbpath <- attr(x, "dbpath")
   config <- read_config(dbpath)
   config[["languages"]][["meta"]] <- NULL
@@ -105,12 +105,16 @@ print.lexalx <- function(x, ...) {
 
   n_senses <- length(x$senses)
   lexeme <- x$lexeme
-  if (length(lexeme) > 1) {
-    lexeme_tr <- lexeme[["translit"]]
-    lexeme_part <- "{crayon::blue(lexeme[[1]])}, {.emph {lexeme_tr}}"
-  } else {
-    lexeme_part <- lexeme
+  if (is.null(writing)) {
+    writing <- names(lexeme)[1]
   }
+  if (is.character(lexeme)) {
+    lexeme_part <- "{crayon::blue(lexeme)}"
+  } else {
+    lexeme_tr <- lexeme[[writing]][[2]][["transcription"]]
+    lexeme_part <- "{crayon::blue(lexeme[[writing]][[1]])} {.emph {crayon::blue(lexeme_tr)}}"
+  }
+
   if (!is.null(x$phonetic)) {
     if (length(x$phonetic) > 1 ) {
       phonetic <- x$phonetic[[1]]

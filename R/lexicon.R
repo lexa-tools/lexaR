@@ -161,7 +161,7 @@ search_lexicon <- function(lexadb,
 #' show_entry(eleryon, 6)
 #' # Same as:
 #' show_entry(eleryon, "lx_000006")
-show_entry <- function(lexadb, entry_id) {
+show_entry <- function(lexadb, entry_id, writing = NULL) {
   db_path <- attr(lexadb, "meta")$path
 
   if (!stringr::str_detect(entry_id, "lx")) {
@@ -184,7 +184,8 @@ show_entry <- function(lexadb, entry_id) {
   attr(lx, "dbpath") <- db_path
   class(lx) <- c("lexalx", "list")
 
-  return(lx)
+  print(lx, writing = writing)
+  invisible(lx)
 }
 
 # Open and edit entries ----
