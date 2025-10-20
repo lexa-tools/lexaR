@@ -45,9 +45,26 @@ validate_lexicon <- function(lexadb) {
       validated <- jsonvalidate::json_validate(
         entry_json,
         system.file("extdata/json-schemas/lx-schema.json", package = "lexaR"),
-        verbose = FALSE,
-        engine = "ajv",
-        preloaded_schemas
+        verbose = TRUE,
+        engine = "ajv"
+      )
+      return(validated)
+    }
+  )
+}
+
+validate_collections <- function(lexadb) {
+  db_path <- attr(lexadb, "meta")$path
+  collections <- read_collections(db_path)
+  lapply(
+    collections,
+    function(entry) {
+      entry_json <- jsonlite::toJSON(entry, auto_unbox = TRUE)
+      validated <- jsonvalidate::json_validate(
+        entry_json,
+        system.file("extdata/json-schemas/cl-schema.json", package = "lexaR"),
+        verbose = TRUE,
+        engine = "ajv"
       )
       return(validated)
     }

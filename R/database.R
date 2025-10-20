@@ -65,5 +65,12 @@ load_lexadb <- function(path) {
     cli::cli_li(invalid_ids)
   }
 
+  cl_val <- validate_collections(lexadb)
+  if (any(!unlist(cl_val))) {
+    invalid_ids <- names(cl_val[cl_val == FALSE])
+    cli::cli_alert_danger("The collections have entries that do not match the expected schema:")
+    cli::cli_li(invalid_ids)
+  }
+
   return(lexadb)
 }
