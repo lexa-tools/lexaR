@@ -5,8 +5,8 @@ sentences:
     id: st_000001
     sentence:
       hira:
-        - "ふぁろっしゃ「ぎそんの「うっつろい"
-        - transcription: "Farossha gisonno uttroi."
+        text: "ふぁろっしゃ「ぎそんの「うっつろい"
+        transcription: "Farossha gisonno uttroi."
       romaji: Farossha gisonno uttroi.
     morphemes: "fa-rossha gi-sonno uttr-oi"
     gloss: "ACC-lunch NOM-1PL eat-1PL"
@@ -16,8 +16,8 @@ sentences:
     id: st_000002
     sentence:
       hira:
-        - "がっと 「しさんの「うっつろい"
-        - transcription: "Gatto sisonno uttroi."
+        text: "がっと 「しさんの「うっつろい"
+        transcription: "Gatto sisonno uttroi."
       romaji: "Gatto sisonno uttroi."
     morphemes: "gatto si-sonno uttr-oi"
     gloss: "dinner ERG-1PL eat-1PL"

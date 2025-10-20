@@ -1,9 +1,9 @@
 id: lx_000001
 lexeme:
   hira:
-    - ろっしゃ
-    - transcription: rossha
-    - transliteration: roQshya
+    text: ろっしゃ
+    transcription: rossha
+    transliteration: roQshya
   romaji: rossha
 phonemic: roʃʃa
 phonetic: ɽɔʃʃa
@@ -15,9 +15,9 @@ allomorphs:
     id: al_01
     morph:
       hira:
-        - ろっしゃ
-        - transcription: rossha
-        - transliteration: roQshya
+        text: ろっしゃ
+        transcription: rossha
+        transliteration: roQshya
       romaji: rossha
     phonetic: ɽɔʃʃa
 senses:
@@ -29,9 +29,9 @@ senses:
     definition:
       bro:
         hira:
-          - "うって「おん「ふおい「さんの"
-          - transcription: "utte on foi sanno"
-          - transliteration: "uQte on fuoi sanno"
+          text: "うって「おん「ふおい「さんの"
+          transcription: "utte on foi sanno"
+          transliteration: "uQte on fuoi sanno"
         romaji: "utte on foi sanno"
       eng: "lunch, midday meal"
       jpn: "昼食、昼間に食べる食事"

@@ -144,24 +144,27 @@
             "type": "object",
             "additionalProperties": {
                 "oneOf": [
+                    { "type": "string" },
                     {
-                        "type": "string"
-                    },
-                    {
-                    "type": "array",
-                    "minItems": 2,
-                    "items": [
-                        { "type": "string" } 
-                    ],
-                    "contains": {
                         "type": "object",
+                        "minProperties": 2,
                         "properties": {
-                        "transliteration": { "type": "string" },
-                        "transcription": { "type": "string" }
+                            "text": { "type": "string" },
+                            "transliteration": {
+                                "oneOf": [
+                                    { "type": "string" },
+                                    { "type": "object" }
+                                ]
+                            },
+                            "transcription": {
+                                "oneOf": [
+                                    { "type": "string" },
+                                    { "type": "object" }
+                                ]
+                            }
                         },
-                        "minProperties": 1,
+                        "required": ["text"],
                         "additionalProperties": false
-                    }
                     }
                 ]
             }
