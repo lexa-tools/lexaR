@@ -222,12 +222,18 @@ print.lexalx <- function(x, writing = NULL, ...) {
   for (allo in seq_len(length(x$allomorphs))) {
     conditioning <- x$allomorphs[[allo]]$condition
     morph <- x$allomorphs[[allo]]$morph
-    if (length(morph) > 1) {
-      morph_tr <- morph[["translit"]]
-      morph_part <- "{crayon::blue(morph[[1]])}, {.emph {morph_tr}}"
+
+    if (is.character(morph)) {
+      morph_part <- "{crayon::blue(morph)}"
     } else {
-      morph_part <- morph
+      if (is.character(morph[[writing]])) {
+        morph_part <- "{crayon::blue(morph[[writing]])}"
+      } else {
+        morph_tr <- morph[[writing]][[2]][["transcription"]]
+        morph_part <- "{crayon::blue(morph[[writing]][[1]])} {crayon::blue(morph_tr)}"
+      }
     }
+
     morph_line <- paste(
       "{cli::col_red(cli::symbol$bullet)}",
       morph_part,
