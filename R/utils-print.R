@@ -115,7 +115,10 @@ print.lexalx <- function(x, writing = NULL, ...) {
       lexeme_part <- "{crayon::blue(lexeme[[writing]])}"
     } else {
       lexeme_tr <- lexeme[[writing]][[2]][["transcription"]]
-      lexeme_part <- "{crayon::blue(lexeme[[writing]][[1]])} ({crayon::blue(lexeme_tr)})"
+      if (is.null(lexeme_tr)) {
+        lexeme_tr <- lexeme[[writing]][[2]][["transliteration"]]
+      }
+      lexeme_part <- "{crayon::blue(lexeme[[writing]][[1]])} {crayon::blue(paste0('(', lexeme_tr, ')'))}"
     }
   }
 
@@ -230,7 +233,10 @@ print.lexalx <- function(x, writing = NULL, ...) {
         morph_part <- "{crayon::blue(morph[[writing]])}"
       } else {
         morph_tr <- morph[[writing]][[2]][["transcription"]]
-        morph_part <- "{crayon::blue(morph[[writing]][[1]])} {crayon::blue(morph_tr)}"
+        if (is.null(morph_tr)) {
+          morph_tr <- morph[[writing]][[2]][["transliteration"]]
+        }
+        morph_part <- "{crayon::blue(morph[[writing]][[1]])} {crayon::blue(paste0('(', morph_tr, ')'))}"
       }
     }
 
