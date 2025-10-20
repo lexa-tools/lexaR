@@ -169,18 +169,36 @@ print.lexalx <- function(x, writing = NULL, ...) {
           file.path(attr(x, "dbpath"), "collections", paste0(cl_st[[1]][1], ".yaml"))
         )
         sentence <- collection$sentences[[cl_st[[1]][2]]]
+        this_sentence <- sentence$sentence
 
         d <- cli::cli_div(
           class = "example",
           theme = list(.example = list(`margin-left` = 10))
         )
         cli::cli_h3("Examples")
-        cli::cli_text(
-          "{cli::col_blue(sentence$sentence)}
-          [{examples_id}]
-          "
-        )
-        cli::cli_text(sentence$translation)
+        if (is.character(this_sentence)) {
+          cli::cli_text(cli::col_blue(this_sentence))
+        } else {
+          if (is.character(this_sentence[[writing]])) {
+            # EXAMPLE
+            # romaji: "rossha"
+            cli::cli_text(crayon::blue(this_sentence[[writing]][["text"]]))
+          } else {
+            # EXAMPLE
+            # hira:
+            #  - HIRA
+            #  - transcription: "hira"
+            #  - transliteration: "hira"
+            sentence_tr <- this_sentence[[writing]][["transcription"]]
+            if (is.null(sentence_tr)) {
+              sentence_tr <- this_sentence[[writing]][["transliteration"]]
+            }
+
+            cli::cli_text(crayon::blue(this_sentence[[writing]][["text"]]))
+            cli::cli_text(crayon::blue(sentence_tr))
+          }
+        }
+        cli::cli_text("{sentence$translation} {cli::col_grey(paste0('[', {examples_id}, ']'))}")
         cli::cli_end(d)
       } else {
         d <- cli::cli_div(
@@ -189,18 +207,42 @@ print.lexalx <- function(x, writing = NULL, ...) {
         )
         cli::cli_h3("Examples")
         for (ex in seq_len(length(examples_id))) {
-          cl_st <- stringr::str_split(examples_id[[ex]], ":")
+          cl_st <- stringr::str_split(examples_id, ":")
           collection <- yaml::read_yaml(
-            file.path(attr(x, "dbpath"), "collections", paste0(cl_st[[1]][1], ".yaml"))
+            file.path(attr(x, "dbpath"), "collections", paste0(cl_st[[ex]][1], ".yaml"))
           )
-          sentence <- collection$sentences[[cl_st[[1]][2]]]
-          cli::cli_text(
-            "{cli::col_blue(sentence$sentence)}
-            [{examples_id[[ex]]}]
-            "
-          )
-          cli::cli_text(sentence$translation)
-          cli::cli_text("")
+          sentence <- collection$sentences[[cl_st[[ex]][2]]]
+          this_sentence <- sentence$sentence
+
+          if (is.character(this_sentence)) {
+            cli::cli_text(
+              "{cli::col_blue(this_sentence)}
+              [{examples_id[ex]}]
+              "
+            )
+          } else {
+            if (is.character(this_sentence[[writing]])) {
+              # EXAMPLE
+              # romaji: "rossha"
+              cli::cli_text(crayon::blue(this_sentence[[writing]][["text"]]))
+            } else {
+              # EXAMPLE
+              # hira:
+              #  - HIRA
+              #  - transcription: "hira"
+              #  - transliteration: "hira"
+              sentence_tr <- this_sentence[[writing]][["transcription"]]
+              if (is.null(sentence_tr)) {
+                sentence_tr <- this_sentence[[writing]][["transliteration"]]
+              }
+
+              cli::cli_text(crayon::blue(this_sentence[[writing]][["text"]]))
+              cli::cli_text(crayon::blue(sentence_tr))
+            }
+          }
+
+          cli::cli_text("{sentence$translation} {cli::col_grey(paste0('[', {examples_id[ex]}, ']'))}")
+          cli::cli_text(" ")
         }
         cli::cli_end(d)
       }
