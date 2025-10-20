@@ -4,8 +4,10 @@ sentences:
   st_000001:
     id: st_000001
     sentence:
-      bro: "ふぁろっしゃ「ぎそんの「うっつろい"
-      transcription: "Farossha gisonno uttroi."
+      hira:
+        - "ふぁろっしゃ「ぎそんの「うっつろい"
+        - transcription: "Farossha gisonno uttroi."
+      romaji: Farossha gisonno uttroi.
     morphemes: "fa-rossha gi-sonno uttr-oi"
     gloss: "ACC-lunch NOM-1PL eat-1PL"
     phonetic: "faɽɔʃʃa gisɔnno uttɽoi"
@@ -13,8 +15,10 @@ sentences:
   st_000002:
     id: st_000002
     sentence:
-      bro: "がっと 「しさんの「うっつろい"
-      transcription: "Gatto sisonno uttroi."
+      hira:
+        - "がっと 「しさんの「うっつろい"
+        - transcription: "Gatto sisonno uttroi."
+      romaji: "Gatto sisonno uttroi."
     morphemes: "gatto si-sonno uttr-oi"
     gloss: "dinner ERG-1PL eat-1PL"
     phonetic: "gatto sisɔnno uttɽoi"
