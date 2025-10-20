@@ -114,11 +114,11 @@ print.lexalx <- function(x, writing = NULL, ...) {
     if (is.character(lexeme[[writing]])) {
       lexeme_part <- "{crayon::blue(lexeme[[writing]])}"
     } else {
-      lexeme_tr <- lexeme[[writing]][[2]][["transcription"]]
+      lexeme_tr <- lexeme[[writing]][["transcription"]]
       if (is.null(lexeme_tr)) {
-        lexeme_tr <- lexeme[[writing]][[2]][["transliteration"]]
+        lexeme_tr <- lexeme[[writing]][["transliteration"]]
       }
-      lexeme_part <- "{crayon::blue(lexeme[[writing]][[1]])} {crayon::blue(paste0('(', lexeme_tr, ')'))}"
+      lexeme_part <- "{crayon::blue(lexeme[[writing]][['text']])} {crayon::blue(paste0('(', lexeme_tr, ')'))}"
     }
   }
 
@@ -232,11 +232,11 @@ print.lexalx <- function(x, writing = NULL, ...) {
       if (is.character(morph[[writing]])) {
         morph_part <- "{crayon::blue(morph[[writing]])}"
       } else {
-        morph_tr <- morph[[writing]][[2]][["transcription"]]
+        morph_tr <- morph[[writing]][["transcription"]]
         if (is.null(morph_tr)) {
-          morph_tr <- morph[[writing]][[2]][["transliteration"]]
+          morph_tr <- morph[[writing]][["transliteration"]]
         }
-        morph_part <- "{crayon::blue(morph[[writing]][[1]])} {crayon::blue(paste0('(', morph_tr, ')'))}"
+        morph_part <- "{crayon::blue(morph[[writing]][['text']])} {crayon::blue(paste0('(', morph_tr, ')'))}"
       }
     }
 
@@ -324,12 +324,12 @@ print.lexacl <- function(x, writing = NULL, ...) {
         #  - HIRA
         #  - transcription: "hira"
         #  - transliteration: "hira"
-        sentence_tr <- this_sentence[[writing]][[2]][["transcription"]]
+        sentence_tr <- this_sentence[[writing]][["transcription"]]
         if (is.null(sentence_tr)) {
-          sentence_tr <- this_sentence[[writing]][[2]][["transliteration"]]
+          sentence_tr <- this_sentence[[writing]][["transliteration"]]
         }
 
-        cli::cli_text(crayon::green(this_sentence[[writing]][[1]]))
+        cli::cli_text(crayon::green(this_sentence[[writing]][["text"]]))
         cli::cli_text(crayon::green(sentence_tr))
       }
     }
