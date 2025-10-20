@@ -106,7 +106,7 @@ search_collections <- function(lexadb, word = NULL, whole = TRUE, gloss = NULL) 
 #'
 #' show_collection(albanian, 1)
 #' show_collection(albanian, 1, 3)
-show_collection <- function(lexadb, coll_id, sent_id = NULL) {
+show_collection <- function(lexadb, coll_id, sent_id = NULL, writing = NULL) {
   db_path <- attr(lexadb, "meta")$path
 
   if (!stringr::str_detect(coll_id, "cl")) {
@@ -129,7 +129,7 @@ show_collection <- function(lexadb, coll_id, sent_id = NULL) {
     attr(cl, "dbpath") <- db_path
     class(cl) <- c("lexacl", "list")
 
-    return(cl)
+    print.lexacl(cl, writing = writing)
   } else {
     if (!stringr::str_detect(sent_id, "st")) {
       sent_id <- stringr::str_pad(sent_id, 6, "left", "0")
@@ -140,7 +140,7 @@ show_collection <- function(lexadb, coll_id, sent_id = NULL) {
     attr(st, "dbpath") <- db_path
     class(st) <- c("lexast", "list")
 
-    return(st)
+    print.lexast(st, writing = writing)
   }
 
 }

@@ -314,13 +314,24 @@ print.lexacl <- function(x, writing = NULL, ...) {
     if (is.character(this_sentence)) {
       cli::cli_text(cli::col_green(this_sentence))
     } else {
-      sentence_tr <- this_sentence[[writing]][[2]][["transcription"]]
-      if (is.null(sentence_tr)) {
-        sentence_tr <- this_sentence[[writing]][[2]][["transliteration"]]
-      }
+      if (is.character(this_sentence[[writing]])) {
+        # EXAMPLE
+        # romaji: "rossha"
+        cli::cli_text(crayon::green(this_sentence[[writing]][[1]]))
+      } else {
+        # EXAMPLE
+        # hira:
+        #  - HIRA
+        #  - transcription: "hira"
+        #  - transliteration: "hira"
+        sentence_tr <- this_sentence[[writing]][[2]][["transcription"]]
+        if (is.null(sentence_tr)) {
+          sentence_tr <- this_sentence[[writing]][[2]][["transliteration"]]
+        }
 
-      cli::cli_text(crayon::green(this_sentence[[writing]][[1]]))
-      cli::cli_text(crayon::green(sentence_tr))
+        cli::cli_text(crayon::green(this_sentence[[writing]][[1]]))
+        cli::cli_text(crayon::green(sentence_tr))
+      }
     }
 
     cli::cli_text(x$sentences[[sentence]]$translation)
