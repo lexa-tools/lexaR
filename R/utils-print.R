@@ -111,8 +111,12 @@ print.lexalx <- function(x, writing = NULL, ...) {
   if (is.character(lexeme)) {
     lexeme_part <- "{crayon::blue(lexeme)}"
   } else {
-    lexeme_tr <- lexeme[[writing]][[2]][["transcription"]]
-    lexeme_part <- "{crayon::blue(lexeme[[writing]][[1]])} {.emph {crayon::blue(lexeme_tr)}}"
+    if (is.character(lexeme[[writing]])) {
+      lexeme_part <- "{crayon::blue(lexeme[[writing]])}"
+    } else {
+      lexeme_tr <- lexeme[[writing]][[2]][["transcription"]]
+      lexeme_part <- "{crayon::blue(lexeme[[writing]][[1]])} {crayon::blue(lexeme_tr)}"
+    }
   }
 
   if (!is.null(x$phonetic)) {
