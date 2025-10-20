@@ -115,7 +115,7 @@ print.lexalx <- function(x, writing = NULL, ...) {
       lexeme_part <- "{crayon::blue(lexeme[[writing]])}"
     } else {
       lexeme_tr <- lexeme[[writing]][[2]][["transcription"]]
-      lexeme_part <- "{crayon::blue(lexeme[[writing]][[1]])} {crayon::blue(lexeme_tr)}"
+      lexeme_part <- "{crayon::blue(lexeme[[writing]][[1]])} ({crayon::blue(lexeme_tr)})"
     }
   }
 
