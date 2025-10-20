@@ -302,17 +302,27 @@ print.lexalxscompact <- function(x, ...) {
 #'
 #' @return Nothing. Used for its side effects.
 #' @export
-print.lexacl <- function(x, ...) {
+print.lexacl <- function(x, writing = NULL, ...) {
   cli::cli_h1(cli::col_blue(x$title))
   for (sentence in seq_len(length(x$sentences))) {
     cli::cli_h2(x$sentences[[sentence]]$id)
-    if (!is.null(x$sentences[[sentence]]$transcription)) {
-      cli::cli_text(cli::col_green(x$sentences[[sentence]]$transcription))
+
+    this_sentence <- x$sentences[[sentence]]$sentence
+    if (is.null(writing)) {
+      writing <- names(this_sentence)[1]
     }
-    if (!is.null(x$sentences[[sentence]]$transliteration)) {
-      cli::cli_text(cli::col_green(x$sentences[[sentence]]$transliteration))
+    if (is.character(this_sentence)) {
+      cli::cli_text(cli::col_green(this_sentence))
+    } else {
+      sentence_tr <- this_sentence[[writing]][[2]][["transcription"]]
+      if (is.null(sentence_tr)) {
+        sentence_tr <- this_sentence[[writing]][[2]][["transliteration"]]
+      }
+
+      cli::cli_text(crayon::green(this_sentence[[writing]][[1]]))
+      cli::cli_text(crayon::green(sentence_tr))
     }
-    cli::cli_text(cli::col_green(x$sentences[[sentence]]$sentence))
+
     cli::cli_text(x$sentences[[sentence]]$translation)
   }
 }
