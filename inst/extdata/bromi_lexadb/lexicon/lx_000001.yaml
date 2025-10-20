@@ -3,7 +3,7 @@ lexeme:
   hira:
     text: ろっしゃ
     transcription: rossha
-    transliteration: roQshya
+    transliteration: roQsh(i)ya
   romaji: rossha
 phonemic: roʃʃa
 phonetic: ɽɔʃʃa
@@ -17,7 +17,7 @@ allomorphs:
       hira:
         text: ろっしゃ
         transcription: rossha
-        transliteration: roQshya
+        transliteration: roQsh(i)ya
       romaji: rossha
     phonetic: ɽɔʃʃa
 senses:
@@ -29,9 +29,9 @@ senses:
     definition:
       bro:
         hira:
-          text: "うって「おん「ふおい「さんの"
+          text: "うって「おん「ふぉい「さんの"
           transcription: "utte on foi sanno"
-          transliteration: "uQte on fuoi sanno"
+          transliteration: "uQte on f(u)oi sanno"
         romaji: "utte on foi sanno"
       eng: "lunch, midday meal"
       jpn: "昼食、昼間に食べる食事"
