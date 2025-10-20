@@ -23,3 +23,14 @@ sentences:
     gloss: "dinner ERG-1PL eat-1PL"
     phonetic: "gatto sisɔnno uttɽoi"
     translation: "We are having dinner."
+  st_000003:
+    id: st_000003
+    sentence:
+      hira:
+        text: "ろっしゃ 「しさんの「うったのい"
+        transcription: "Rossha sisonno uttanoi."
+      romaji: "Rossha sisonno uttanoi."
+    morphemes: "rossha si-sonno uttr-oi"
+    gloss: "lunch ERG-1PL eat\PST-1PL"
+    phonetic: "rossha sisɔnno uttɽoi"
+    translation: "We had lunch."
