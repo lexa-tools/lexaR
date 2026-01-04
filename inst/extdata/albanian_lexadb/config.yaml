@@ -1,2 +1,4 @@
 schema: lexadb
-name: albanian
+schema_version: 0.0.0.9000
+name: Albanian
+author: Stefano Coretta

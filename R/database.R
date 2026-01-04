@@ -47,6 +47,17 @@ load_lexadb <- function(path) {
 
   config <- read_config(path)
 
+  validated <- validate_db(path, config)
+
+  if (any(!unlist(validated$valid))) {
+
+    cli::cli_abort(
+      c("The provided database is not a valid Lexa database. Problems:", validated$problems)
+    )
+  } else {
+    cli::cli_alert_success("Database is valid.")
+  }
+
   cli::cli_alert_info("Loading: {.strong {config$name}}")
 
   lexadb <- list(
@@ -63,6 +74,8 @@ load_lexadb <- function(path) {
     invalid_ids <- names(lx_val[lx_val == FALSE])
     cli::cli_alert_danger("The lexicon has entries that do not match the expected schema:")
     cli::cli_li(invalid_ids)
+  } else {
+    cli::cli_alert_success("Lexicon is valid.")
   }
 
   cl_val <- validate_collections(lexadb)
@@ -70,6 +83,8 @@ load_lexadb <- function(path) {
     invalid_ids <- names(cl_val[cl_val == FALSE])
     cli::cli_alert_danger("The collections have entries that do not match the expected schema:")
     cli::cli_li(invalid_ids)
+  } else {
+    cli::cli_alert_success("Collections are valid.")
   }
 
   return(lexadb)
