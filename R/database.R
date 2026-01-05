@@ -38,25 +38,20 @@ create_lexadb <- function(parent = ".", name) {
 #' albanian
 #'
 load_lexadb <- function(path) {
-  if (
-    !stringr::str_ends(path, "_lexadb/?") |
-    !file.exists(file.path(path, "config.yaml"))
-  ) {
-    cli::cli_abort("The provided path is not a Lexa database.")
+  if (!file.exists(file.path(path, "config.yaml"))) {
+    cli::cli_abort(
+      c("There is no {.file config.yaml}.", "x" = "LexaDB not loaded.")
+    )  
   }
 
   config <- read_config(path)
 
-  validated <- validate_db(path, config)
-
-  if (any(!unlist(validated$valid))) {
-
-    cli::cli_abort(
-      c("The provided database is not a valid Lexa database. Problems:", validated$problems)
-    )
-  } else {
-    cli::cli_alert_success("Database is valid.")
+  # Do not go past this if the schema version is unknown
+  if (!(config$schema_version %in% c("0.0.0.9000"))) {
+    cli::cli_abort(c("LexaDB schema version not recognised: {config$schema_version}.", "x" = "LexaDB not loaded."))
   }
+
+  config_val <- validate_config(config)
 
   cli::cli_alert_info("Loading: {.strong {config$name}}")
 

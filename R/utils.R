@@ -34,32 +34,18 @@ generate_cl_id <- function(lexadb) {
   return(new_id)
 }
 
-validate_db <- function(path, config = NULL) {
-  if (is.null(config)) {
-    config <- read_config(path)
-  }
+validate_config <- function(config) {
+  config_json <- jsonlite::toJSON(config, auto_unbox = TRUE)
 
   if (config$schema_version == "0.0.0.9000") {
-    valid <- list(
-      schema = config$schema == "lexadb",
-      lexicon = dir.exists(file.path(path, "lexicon")),
-      collections = dir.exists(file.path(path, "collections")),
-      morphology = file.exists(file.path(path, "morphology.yaml"))
+    validated <- jsonvalidate::json_validate(
+      config_json,
+      system.file("extdata/json-schemas/0.0.0.9000/config-schema.json", package = "lexaR"),
+      verbose = TRUE,
+      engine = "ajv"
     )
-
-    messages <- c(
-      x = "The schema is not {.file lexadb}.",
-      x = "{.file lexicon/} is missing.",
-      x = "{.file collections/} is missing.",
-      x = "{.file morphology.yaml} is missing."
-    )
-
-    problems <- messages[!unlist(valid)]
-
-    return(list(valid = valid, problems = problems))
-  } else {
-    cli::cli_abort("Lexadb schema version not recognised: {config$schema_version}")
   }
+  return(validated)
 }
 
 validate_lexicon <- function(lexadb) {
