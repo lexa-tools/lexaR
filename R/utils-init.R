@@ -2,10 +2,12 @@
 # These functions initialise different parts of a Lexa database. They are used
 # when creating a new Lexa database with `create_lexadb()`.
 
-init_config <- function(path, name) {
+init_config <- function(path, name, schema_version = "0.0.0.9000") {
   config <- list(
     schema = "lexadb",
-    name = name
+    schema_version = schema_version,
+    name = name,
+    author = ""
   )
   yaml::write_yaml(config, file.path(path, "config.yaml"))
 }

@@ -14,11 +14,15 @@
 create_lexadb <- function(parent = ".", name) {
   name_db <- paste0(name, "_lexadb")
   path <- file.path(parent, name_db)
+
+  if (dir.exists(path)) {
+    cli::cli_abort("LexaDB '{name_db}' already exists!")
+  }
+  
   dir.create(path, FALSE, TRUE)
 
   init_config(path, name)
   init_lexicon(path)
-  init_grammar(path)
   init_collections(path)
 }
 
