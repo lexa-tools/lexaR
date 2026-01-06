@@ -53,6 +53,10 @@ load_lexadb <- function(path) {
 
   config_val <- validate_config(config)
 
+  if (!config_val) {
+    cli::cli_abort(c("{.file config.yaml} is not valid.", "x" = "LexaDB not loaded."))
+  }
+
   cli::cli_alert_info("Loading: {.strong {config$name}}")
 
   lexadb <- list(
