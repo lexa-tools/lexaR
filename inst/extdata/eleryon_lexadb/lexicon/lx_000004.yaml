@@ -1,20 +1,12 @@
 id: lx_000004
 lexeme: evēsellose
 phonemic: eveɪsellose
+word_type: lexical
 word_class: verb
 grammatical_features:
   class: thematic
   class_no: IV
 etymology: "From {.etym vēselse} 'to learn'."
-allomorphs:
-  al_01:
-    id: al_01
-    morph: vēsel
-    phonemic: veɪsel
-  al_02:
-    id: al_02
-    morph: evēsel
-    phonemic: eveɪsel
 senses:
   se_01:
     id: se_01

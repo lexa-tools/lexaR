@@ -7,19 +7,8 @@ lexeme:
   romaji: rossha
 phonemic: roʃʃa
 phonetic: ɽɔʃʃa
-morph_category: lexical
-morph_type: root
-part_of_speech: noun
-allomorphs:
-  al_01:
-    id: al_01
-    morph:
-      hira:
-        text: ろっしゃ
-        transcription: rossha
-        transliteration: roQsh(i)ya
-      romaji: rossha
-    phonetic: ɽɔʃʃa
+word_type: lexical
+word_class: noun
 senses:
   se_01:
     id: se_01

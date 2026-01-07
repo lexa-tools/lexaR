@@ -1,15 +1,11 @@
 id: lx_000003
 lexeme: vēselse
 phonemic: veɪselse
+word_type: lexical
 word_class: verb
 grammatical_features:
   class: athematic
   class_no: II
-allomorphs:
-  al_01:
-    id: al_01
-    morph: vēsel
-    phonemic: veɪsel
 senses:
   se_01:
     id: se_01

@@ -1,19 +1,11 @@
 id: lx_000002
 lexeme: unullose
 phonemic: unullose
+word_type: lexical
 word_class: verb
 grammatical_features:
   class: thematic
   class_no: IV
-allomorphs:
-  al_01:
-    id: al_01
-    morph: nul
-    phon: nul
-  al_02:
-    id: al_02
-    morph: unul
-    phonemic: unul
 senses:
   se_01:
     id: se_01

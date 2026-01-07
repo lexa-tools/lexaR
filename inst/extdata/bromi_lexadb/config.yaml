@@ -2,14 +2,3 @@ schema: lexadb
 schema_version: 0.0.0.9000
 name: "ぶろみ, Bromi"
 author: "Stefano Coretta"
-languages:
-  bro: "Bromi"
-  meta:
-    eng: "English"
-    jpn: "Japanese"
-scripts:
-  bro:
-    hira: "Bromi Hiragana"
-    translit: "Bromi transliteration"
-  eng: "eng"
-  jpn: "jpn"
