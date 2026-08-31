@@ -16,87 +16,51 @@ knitr::opts_chunk$set(
 
 ## General structure
 
-A Lexa database (`lexadb`) is a directory containing the following files/dirs:
+A Lexa database (`lexadb`) is a YAML file containing meta-data and lexical entries.
 
-- `config.yaml`: the database configuration file.
-- `grammar.yaml`: the grammar specification file.
-- `lexicon/`: directory containing Lexa lexicon files.
-- `collections/`: directory containing Lexa sentence collections (`lexacl`).
+## Lexicon entry schema
 
-## Lexicon file schema
+The following is the currently supported schema for a lexical entry.
 
 ```yaml
-id: lx_00000n
-lexeme: <string>
-phonemic: <string>
-phonetic: <string>
-morph_category: <lexical, grammatical>
-morph_type: <root, stem, affix, clitic, particle, compound, phrase>
-part_of_speech: <string>
-inflectional_features:
-  <feature_n>: <string>
-etymology: <string>
-loan_word: <string>
-homophone: <numeric>
-allomorphs:
-  al_0n:
-    id: al_0n
-    morph: <string>
-    phonemic: <string>,
-    phonetic: <string>,
-    condition:
-      <condition_type_n>: <string>
-senses:
-  se_0n:
-    id: se_0n
-    gloss: <string>
-    definition: <string>
-    literal: <string>
-    scientific: <string>
-    usage: <string>
-    inflectional_features:
-      <feature_n>: <string>
-    examples: ["cl_00000n:st_00000n"]
-    etymology: <string>
-crossref: ["lx_00000n"]
-variants: [<string>]
-lists: [<string>]
-semantics:
-  semantic_domain: ["sd_00000n"]
-  synonyms: ["lx_00000n"]
-  antonyms: ["lx_00000n"]
-notes: [<string>]
-date_created: <date>
-date_modified: <date>
-```
-
-## Text schema
-
-Texts are located in the `collections/` folder.
-Each text is saved in a separate `.yaml` file.
-
-```yaml
-id: cl_00000n
-title: <string>
-topic: <string>
-genre: <string>
-participants: [<string>]
-translators: [<string>]
-source: <string>
-sentences:
-  st_00000n:
-    sentence: {<string>,
-        lang: <string>
-        transcription: <string>
-        transliteration: <string>}
-    phonemic: <string>
-    phonetic: <string>
-    morphophonemic: <string>
-    morpho: <string>
-    gloss: <string>
-    translation: <string>
-    literal: <string>
-    notes: [<string>]
-notes: [<string>]
+lx_00000n:
+  id: lx_00000n
+  lexeme: <string>
+  phonemic: <string>
+  phonetic: <string>
+  word_type: <root, stem, affix, clitic, particle, compound, phrase>
+  word_class: <string>
+  grammatical_features:
+    <feature_n>: <string>
+  etymology: <string>
+  loan_word: <string>
+  homophone: <numeric>
+  senses:
+    se_0n:
+      id: se_0n
+      gloss: <string>
+      definition: <string>
+      literal: <string>
+      scientific: <string>
+      usage: <string>
+      grammatical_features:
+        <feature_n>: <string>
+      examples:
+        ex_0n:
+          sentence: <string>
+          translation: <translation>
+          notes: <string>
+      etymology: <string>
+      notes: <string>
+  crossref: ["lx_00000n"]
+  variants: [<string>]
+  lists: [<string>]
+  semantics:
+    semantic_domain: ["sd_00000n"]
+    synonyms: ["lx_00000n"]
+    antonyms: ["lx_00000n"]
+  notes: [<string>]
+  date_created: <date>
+  date_modified: <date>
 ```
 

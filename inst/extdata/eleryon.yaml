@@ -1,3 +1,8 @@
+metadata:
+  schema: lexadb
+  schema_version: 0.0.0.9001
+  name: Eleryon
+  author: "Stefano Coretta"
 lx_000001:
   id: lx_000001
   lexeme: gąryon
@@ -6,11 +11,6 @@ lx_000001:
   grammatical_features:
     declination: first
     theme: -yon(t)
-  allomorphs:
-    al_01:
-      id: al_01
-      morph: gąr
-      phonemic: gɔr
   senses:
     se_01:
       id: se_01
@@ -26,15 +26,6 @@ lx_000002:
   grammatical_features:
     class: thematic
     class_no: IV
-  allomorphs:
-    al_01:
-      id: al_01
-      morph: nul
-      phon: nul
-    al_02:
-      id: al_02
-      morph: unul
-      phonemic: unul
   senses:
     se_01:
       id: se_01
@@ -50,11 +41,6 @@ lx_000003:
   grammatical_features:
     class: athematic
     class_no: II
-  allomorphs:
-    al_01:
-      id: al_01
-      morph: vēsel
-      phonemic: veɪsel
   senses:
     se_01:
       id: se_01
@@ -75,15 +61,6 @@ lx_000004:
     class: thematic
     class_no: IV
   etymology: From {.etym vēselse} 'to learn'.
-  allomorphs:
-    al_01:
-      id: al_01
-      morph: vēsel
-      phonemic: veɪsel
-    al_02:
-      id: al_02
-      morph: evēsel
-      phonemic: eveɪsel
   senses:
     se_01:
       id: se_01
@@ -96,11 +73,6 @@ lx_000005:
   lexeme: chǭs
   phonemic: tʃɵːs
   word_class: adverb
-  allomorphs:
-    al_01:
-      id: al_01
-      morph: chǭs
-      phonemic: tʃɵːs
   senses:
     se_01:
       id: se_01
@@ -119,22 +91,14 @@ lx_000006:
   grammatical_features:
     class: thematic
     class_no: I
-  allomorphs:
-    al_01:
-      id: al_01
-      morph: ųrt
-      phonemic: yrt
-    al_02:
-      id: al_02
-      morph: urųrt
-      phonemic: uryrt
   senses:
     se_01:
       id: se_01
       gloss: sit
       definition: to sit
       examples:
-        - cl_000001:st_000001
-        - cl_000001:st_000002
+        ex_01:
+          sentence: "Ęs ętsu urųrtō enēim kę̄syoh bhųl enēim āireᵃph likhpyūaq."
+          translation: "And then I sat on a rock, while it was raining over me."
   date_created: 2024-02-07T21:54:25Z
   date_modified: 2024-02-07T21:54:25Z
