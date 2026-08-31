@@ -1,0 +1,23 @@
+metadata:
+    schema: lexadb
+    schema_version: 0.0.0.9000
+    name: Albanian
+    author: Stefano Coretta
+lx_000001:
+    id: lx_000001
+    lexeme: erë
+    phonemic: eɽɜ
+    word_type: lexical
+    word_class: noun
+    senses:
+        se_01:
+            id: se_01
+            gloss: wind
+            definition:
+            eng: "wind"
+            examples:
+                ex_01:
+                    sentence: "Era e Veriut dhe Dielli po ziheshin se kush ishte më i fortë."
+                    translation: "The North Wind and the Sun were disputing which was the stronger."
+    date_created: 2022-07-24T14:31:47Z
+    date_modified: 2022-07-24T14:31:47Z
