@@ -18,6 +18,13 @@ read_lexadb <- function(path) {
     metadata = lexadb$metadata,
     lexicon = lexadb[lx_names]
   )
+  lexadb$lexicon <- lapply(
+    lexadb$lexicon,
+    function(x) {
+      class(x) <- "lexalx"
+      x
+    }
+  )
   attr(lexadb, "dbpath") <- path
   class(lexadb) <- c("lexadb", "list")
 
