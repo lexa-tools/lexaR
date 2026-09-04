@@ -6,8 +6,8 @@ metadata:
     languages:
       hira: "Bromi (hiragana)"
       roma: "Bromi (romaji)"
-      eng: "eng"
-      jpn: "jpn"
+      eng: "English"
+      jpn: "Japanese"
 lx_000001:
     id: lx_000001
     lexeme:
