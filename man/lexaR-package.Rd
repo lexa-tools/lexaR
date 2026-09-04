@@ -20,7 +20,12 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Stefano Coretta \email{stefano.coretta@gmail.com} (\href{https://orcid.org/0000-0001-9627-5532}{ORCID}) (stefanocoretta)
+\strong{Maintainer}: Stefano Coretta \email{stefano.coretta@gmail.com} (\href{https://orcid.org/0000-0001-9627-5532}{ORCID}) (github: stefanocoretta)
+
+Authors:
+\itemize{
+  \item Stefano Coretta \email{stefano.coretta@gmail.com} (\href{https://orcid.org/0000-0001-9627-5532}{ORCID}) (github: stefanocoretta)
+}
 
 }
 \keyword{internal}

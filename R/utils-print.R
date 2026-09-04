@@ -76,17 +76,10 @@ print.lexadb <- function(x, ...) {
 #'
 #' @return Nothing. Used for its side effects.
 #' @export
-print.lexalx <- function(x, writing = NULL, ...) {
-  dbpath <- attr(x, "dbpath")
-  config <- read_config(dbpath)
-  config[["languages"]][["meta"]] <- NULL
-  the_language <- names(config[["languages"]])
-
+print.lexalx <- function(x, ...) {
   n_senses <- length(x$senses)
   lexeme <- x$lexeme
-  if (is.null(writing)) {
-    writing <- names(lexeme)[1]
-  }
+
   if (is.character(lexeme)) {
     lexeme_part <- "{crayon::blue(lexeme)}"
   } else {
@@ -101,23 +94,22 @@ print.lexalx <- function(x, writing = NULL, ...) {
     }
   }
 
-  if (!is.null(x$phonetic)) {
-    if (length(x$phonetic) > 1 ) {
-      phonetic <- x$phonetic[[1]]
-    } else {
-      phonetic <- x$phonetic
-    }
+  phonemic <- if (!is.null(x$phonemic)) x$phonemic[[1]] else NULL
+  phonetic <- if (!is.null(x$phonetic)) x$phonetic[[1]] else NULL
 
-    lexeme_line <- paste(lexeme_part,
-                         "[{phonetic}] {.emph {crayon::green(x$part_of_speech)}}")
+  pronunciation <- paste0(
+    if (!is.null(phonemic)) paste0("/", phonemic, "/") else "",
+    if (!is.null(phonetic)) paste0(" [", phonetic, "]") else ""
+  )
 
-  } else {
-    lexeme_line <- paste(lexeme_part,
-                         "{.emph {crayon::green(x$part_of_speech)}}")
-  }
+  lexeme_line <- paste(
+    lexeme_part,
+    pronunciation,
+    "{.emph {crayon::green(x$word_class)}}"
+  )
 
-  if (!is.null(x$inflectional_features)) {
-    lexeme_line <- paste(lexeme_line, "({x$inflectional_features})")
+  if (!is.null(x$grammatical_features)) {
+    lexeme_line <- paste(lexeme_line, "({x$grammatical_features})")
   }
 
   cli::cli_h1("Entry {x$id}")
@@ -133,100 +125,26 @@ print.lexalx <- function(x, writing = NULL, ...) {
     } else {
       definition_part <- definitions[[1]]
     }
-    if (!is.null(x$senses[[sense]]$inflectional_features)) {
+    if (!is.null(x$senses[[sense]]$grammatical_features)) {
       cli::cli_text("{cli::col_red(sense, '.')}
-        {crayon::blue('(', x$senses[[sense]]$inflectional_features, ')', sep = '')}
+        {crayon::blue('(', x$senses[[sense]]$grammatical_features, ')', sep = '')}
         {definition_part}")
     } else {
       cli::cli_text("{cli::col_red(sense, '.')} {definition_part}")
     }
-    examples_id <- x$senses[[sense]]$examples
-    if (!is.null(examples_id)) {
-      if (length(examples_id) == 1) {
-        cl_st <- stringr::str_split(examples_id, ":")
-        collection <- yaml::read_yaml(
-          file.path(attr(x, "dbpath"), "collections", paste0(cl_st[[1]][1], ".yaml"))
+    if (!is.null(x$senses[[sense]]$examples)) {
+      d <- cli::cli_div(
+        class = "example",
+        theme = list(.example = list(`margin-left` = 10))
+      )
+      cli::cli_h3("Examples")
+      for (example in x$senses[[sense]]$examples) {
+        cli::cli_text(
+          "{cli::symbol$bullet} {crayon::blue(example$sentence)} {example$translation}"
         )
-        sentence <- collection$sentences[[cl_st[[1]][2]]]
-        this_sentence <- sentence$sentence
-
-        d <- cli::cli_div(
-          class = "example",
-          theme = list(.example = list(`margin-left` = 10))
-        )
-        cli::cli_h3("Examples")
-        if (is.character(this_sentence)) {
-          cli::cli_text(cli::col_blue(this_sentence))
-        } else {
-          if (is.character(this_sentence[[writing]])) {
-            # EXAMPLE
-            # romaji: "rossha"
-            cli::cli_text(crayon::blue(this_sentence[[writing]][["text"]]))
-          } else {
-            # EXAMPLE
-            # hira:
-            #  - HIRA
-            #  - transcription: "hira"
-            #  - transliteration: "hira"
-            sentence_tr <- this_sentence[[writing]][["transcription"]]
-            if (is.null(sentence_tr)) {
-              sentence_tr <- this_sentence[[writing]][["transliteration"]]
-            }
-
-            cli::cli_text(crayon::blue(this_sentence[[writing]][["text"]]))
-            cli::cli_text(crayon::blue(sentence_tr))
-          }
-        }
-        cli::cli_text("{sentence$translation} {cli::col_grey(paste0('[', {examples_id}, ']'))}")
-        cli::cli_end(d)
-      } else {
-        d <- cli::cli_div(
-          class = "example",
-          theme = list(.example = list(`margin-left` = 10))
-        )
-        cli::cli_h3("Examples")
-        for (ex in seq_len(length(examples_id))) {
-          cl_st <- stringr::str_split(examples_id, ":")
-          collection <- yaml::read_yaml(
-            file.path(attr(x, "dbpath"), "collections", paste0(cl_st[[ex]][1], ".yaml"))
-          )
-          sentence <- collection$sentences[[cl_st[[ex]][2]]]
-          this_sentence <- sentence$sentence
-
-          if (is.character(this_sentence)) {
-            cli::cli_text(
-              "{cli::col_blue(this_sentence)}
-              [{examples_id[ex]}]
-              "
-            )
-          } else {
-            if (is.character(this_sentence[[writing]])) {
-              # EXAMPLE
-              # romaji: "rossha"
-              cli::cli_text(crayon::blue(this_sentence[[writing]][["text"]]))
-            } else {
-              # EXAMPLE
-              # hira:
-              #  - HIRA
-              #  - transcription: "hira"
-              #  - transliteration: "hira"
-              sentence_tr <- this_sentence[[writing]][["transcription"]]
-              if (is.null(sentence_tr)) {
-                sentence_tr <- this_sentence[[writing]][["transliteration"]]
-              }
-
-              cli::cli_text(crayon::blue(this_sentence[[writing]][["text"]]))
-              cli::cli_text(crayon::blue(sentence_tr))
-            }
-          }
-
-          cli::cli_text("{sentence$translation} {cli::col_grey(paste0('[', {examples_id[ex]}, ']'))}")
-          cli::cli_text(" ")
-        }
-        cli::cli_end(d)
       }
+      cli::cli_end(d)
     }
-
   }
 
   if (!is.null(x$etymology)) {
@@ -235,43 +153,13 @@ print.lexalx <- function(x, writing = NULL, ...) {
       `font-style` = "italic",
       color = "blue"
     )))
-    cli::cli_text(x$etymology)
+    cli::cli_text(markdown_to_cli(x$etymology))
     cli::cli_end()
   }
 
   cli::cli_h2("Grammatical info")
-  cli::cli_text("{crayon::red('Category:')} {x$morph_category}")
-  cli::cli_text("{crayon::red('Type:')} {x$morph_type}")
-  cli::cli_h2("Allomorphs")
-  for (allo in seq_len(length(x$allomorphs))) {
-    conditioning <- x$allomorphs[[allo]]$condition
-    morph <- x$allomorphs[[allo]]$morph
-
-    if (is.character(morph)) {
-      morph_part <- "{crayon::blue(morph)}"
-    } else {
-      if (is.character(morph[[writing]])) {
-        morph_part <- "{crayon::blue(morph[[writing]])}"
-      } else {
-        morph_tr <- morph[[writing]][["transcription"]]
-        if (is.null(morph_tr)) {
-          morph_tr <- morph[[writing]][["transliteration"]]
-        }
-        morph_part <- "{crayon::blue(morph[[writing]][['text']])} {crayon::blue(paste0('(', morph_tr, ')'))}"
-      }
-    }
-
-    morph_line <- paste(
-      "{cli::col_red(cli::symbol$bullet)}",
-      morph_part,
-      "[{x$allomorphs[[allo]]$phonetic}]
-      {ifelse(!is.null(conditioning), paste0('(',
-      cli::col_green(conditioning$type), ': ',
-      conditioning$context, ')'), '')}"
-    )
-    cli::cli_text(morph_line)
-
-  }
+  cli::cli_text("{crayon::red('Type:')} {x$word_type}")
+  cli::cli_text("{crayon::red('Class:')} {x$word_class}")
 
   if (!is.null(x$notes)) {
     cli::cli_h2("Notes")
@@ -312,4 +200,11 @@ print.lexalxscompact <- function(x, ...) {
       cli::cli_bullets(c("*" = lexeme_line))
     }
   )
+}
+
+markdown_to_cli <- function(x) {
+  x <- gsub("\\*\\*(.*?)\\*\\*", "{cli::style_bold('\\1')}", x)
+  x <- gsub("\\*(.*?)\\*", "{cli::style_italic('\\1')}", x)
+  x <- gsub("_(.*?)_", "{cli::style_italic('\\1')}", x)
+  x
 }

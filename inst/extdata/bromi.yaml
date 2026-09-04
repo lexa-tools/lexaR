@@ -3,6 +3,17 @@ metadata:
     schema_version: 0.0.0.9001
     name: "ぶろみ, Bromi"
     author: "Stefano Coretta"
+    languages:
+      bro: "Bromi"
+      meta:
+        eng: "English"
+        jpn: "Japanese"
+    scripts:
+      bro:
+        hira: "Bromi Hiragana"
+        translit: "Bromi transliteration"
+      eng: "eng"
+      jpn: "jpn"
 lx_000001:
     id: lx_000001
     lexeme:

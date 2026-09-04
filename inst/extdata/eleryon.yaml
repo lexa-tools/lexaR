@@ -64,7 +64,7 @@ lx_000004:
   grammatical_features:
     class: thematic
     class_no: IV
-  etymology: From {.etym vēselse} 'to learn'.
+  etymology: From *vēselse* 'to learn'.
   senses:
     se_01:
       id: se_01
