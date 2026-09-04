@@ -12,78 +12,304 @@
 #' @export
 #'
 print.lexadb <- function(x, ...) {
-  db_path <- attr(x, "meta")$path
+  db_path <- attr(x, "metadata")$dbpath
 
-  lexicon <- read_lexicon(db_path)
+  lexicon <- x$lexicon
   lexicon_length <- length(lexicon)
 
-  collections <- read_collections(db_path)
-  collections_length <- length(collections)
+  wtypes <- table(unlist(lapply(lexicon, function(x) x$word_type)))
+  wtypes_length <- length(wtypes)
 
-  mcats <- table(unlist(lapply(lexicon, function(x) x$morph_category)))
-  mcats_length <- length(mcats)
-
-  if (mcats_length > 0) {
-    names(mcats) <- paste0("{crayon::red('", stringr::str_to_sentence(names(mcats)), ":')}")
-    cats <- "{crayon::red(cli::symbol$circle_filled)} Categories {crayon::green(cli::symbol$arrow_right)} "
-    for (cat_i in 1:mcats_length) {
-      cats <- paste(cats, names(mcats)[cat_i], mcats[[cat_i]])
-      if (cat_i < mcats_length) {
-        cats <- paste(cats, crayon::green('|'))
-      }
-    }
-  } else {
-    cats <- "{crayon::red(cli::symbol$circle_filled)} Categories {crayon::green(cli::symbol$arrow_right)} "
-  }
-
-
-  mtypes <- table(unlist(lapply(lexicon, function(x) x$morph_type)))
-  mtypes_length <- length(mtypes)
-
-  if (mtypes_length > 0) {
-    names(mtypes) <- paste0("{crayon::red('", stringr::str_to_sentence(names(mtypes)), "s:')}")
-    types <- "{crayon::red(cli::symbol$circle_filled)} Morpheme types {crayon::green(cli::symbol$arrow_right)} "
-    for (type_i in 1:mtypes_length) {
-      types <- paste(types, names(mtypes)[type_i], mtypes[[type_i]])
-      if (type_i < mtypes_length) {
+  if (wtypes_length > 0) {
+    names(wtypes) <- paste0("{crayon::red('", stringr::str_to_sentence(names(wtypes)), ":')}")
+    types <- "{crayon::red(cli::symbol$circle_filled)} Word types {crayon::green(cli::symbol$arrow_right)} "
+    for (type_i in 1:wtypes_length) {
+      types <- paste(types, names(wtypes)[type_i], wtypes[[type_i]])
+      if (type_i < wtypes_length) {
         types <- paste(types, crayon::green('|'))
       }
     }
   } else {
-    types <- "{crayon::red(cli::symbol$circle_filled)} Morpheme types {crayon::green(cli::symbol$arrow_right)} "
+    types <- "{crayon::red(cli::symbol$circle_filled)} Types {crayon::green(cli::symbol$arrow_right)} "
   }
 
+  wclass <- table(unlist(lapply(lexicon, function(x) x$word_class)))
+  wclass_length <- length(wclass)
 
-  poses <- table(unlist(lapply(lexicon, function(x) x$part_of_speech)))
-  poses_length <- length(poses)
-
-  if (poses_length > 0) {
-    names(poses) <- paste0("{crayon::red('", stringr::str_to_sentence(names(poses)), "s:')}")
-    pos <- "{crayon::red(cli::symbol$circle_filled)} POS {crayon::green(cli::symbol$arrow_right)} "
-    for (pos_i in 1:poses_length) {
-      pos <- paste(pos, names(poses)[pos_i], poses[[pos_i]])
-      if (pos_i < poses_length) {
-        pos <- paste(pos, crayon::green('|'))
+  if (wclass_length > 0) {
+    names(wclass) <- paste0("{crayon::red('", stringr::str_to_sentence(names(wclass)), ":')}")
+    classes <- "{crayon::red(cli::symbol$circle_filled)} Word classes {crayon::green(cli::symbol$arrow_right)} "
+    for (class_i in 1:wclass_length) {
+      classes <- paste(classes, names(wclass)[class_i], wclass[[class_i]])
+      if (class_i < wclass_length) {
+        classes <- paste(classes, crayon::green('|'))
       }
     }
   } else {
-    pos <- "{crayon::red(cli::symbol$circle_filled)} POS {crayon::green(cli::symbol$arrow_right)} "
+    classes <- "{crayon::red(cli::symbol$circle_filled)} Classes {crayon::green(cli::symbol$arrow_right)} "
   }
-
 
   cli::cli_h1("Database info")
   cli::cli_text(
     "{crayon::green(cli::symbol$circle_filled)} {crayon::blue('Name:')}
-    {x$config$name}"
+    {x$metadata$name}"
+  )
+  cli::cli_text(
+    "{crayon::green(cli::symbol$circle_filled)} {crayon::blue('Author:')}
+    {x$metadata$author}"
   )
   cli::cli_text(
     "{crayon::green(cli::symbol$info)} {crayon::blue('Entries:')}
-    {lexicon_length}
-    {crayon::green('|')}
-    {crayon::blue('Collections:')} {collections_length}"
+    {lexicon_length}"
   )
   cli::cli_h2("Lexicon breakdown")
-  cli::cli_text(cats)
   cli::cli_text(types)
-  cli::cli_text(pos)
+  cli::cli_text(classes)
+}
+
+#' Print method for lexemes
+#'
+#' Print method for objects of class `lexalx`, which prints lexeme info.
+#'
+#' @param x An object of class `lexalx`.
+#' @param ... Arguments passed to print.
+#'
+#' @return Nothing. Used for its side effects.
+#' @export
+print.lexalx <- function(x, writing = NULL, ...) {
+  dbpath <- attr(x, "dbpath")
+  config <- read_config(dbpath)
+  config[["languages"]][["meta"]] <- NULL
+  the_language <- names(config[["languages"]])
+
+  n_senses <- length(x$senses)
+  lexeme <- x$lexeme
+  if (is.null(writing)) {
+    writing <- names(lexeme)[1]
+  }
+  if (is.character(lexeme)) {
+    lexeme_part <- "{crayon::blue(lexeme)}"
+  } else {
+    if (is.character(lexeme[[writing]])) {
+      lexeme_part <- "{crayon::blue(lexeme[[writing]])}"
+    } else {
+      lexeme_tr <- lexeme[[writing]][["transcription"]]
+      if (is.null(lexeme_tr)) {
+        lexeme_tr <- lexeme[[writing]][["transliteration"]]
+      }
+      lexeme_part <- "{crayon::blue(lexeme[[writing]][['text']])} {crayon::blue(paste0('(', lexeme_tr, ')'))}"
+    }
+  }
+
+  if (!is.null(x$phonetic)) {
+    if (length(x$phonetic) > 1 ) {
+      phonetic <- x$phonetic[[1]]
+    } else {
+      phonetic <- x$phonetic
+    }
+
+    lexeme_line <- paste(lexeme_part,
+                         "[{phonetic}] {.emph {crayon::green(x$part_of_speech)}}")
+
+  } else {
+    lexeme_line <- paste(lexeme_part,
+                         "{.emph {crayon::green(x$part_of_speech)}}")
+  }
+
+  if (!is.null(x$inflectional_features)) {
+    lexeme_line <- paste(lexeme_line, "({x$inflectional_features})")
+  }
+
+  cli::cli_h1("Entry {x$id}")
+  cli::cli_text(lexeme_line)
+
+  cli::cli_h2("Senses")
+  for (sense in 1:length(x$senses)) {
+    definitions <- x$senses[[sense]]$definition
+    if (length(definitions) > 1) {
+      definitions_langs <- names(definitions)
+      definitions[[the_language]] <- NULL
+      definition_part <- paste(definitions, collapse = ". ")
+    } else {
+      definition_part <- definitions[[1]]
+    }
+    if (!is.null(x$senses[[sense]]$inflectional_features)) {
+      cli::cli_text("{cli::col_red(sense, '.')}
+        {crayon::blue('(', x$senses[[sense]]$inflectional_features, ')', sep = '')}
+        {definition_part}")
+    } else {
+      cli::cli_text("{cli::col_red(sense, '.')} {definition_part}")
+    }
+    examples_id <- x$senses[[sense]]$examples
+    if (!is.null(examples_id)) {
+      if (length(examples_id) == 1) {
+        cl_st <- stringr::str_split(examples_id, ":")
+        collection <- yaml::read_yaml(
+          file.path(attr(x, "dbpath"), "collections", paste0(cl_st[[1]][1], ".yaml"))
+        )
+        sentence <- collection$sentences[[cl_st[[1]][2]]]
+        this_sentence <- sentence$sentence
+
+        d <- cli::cli_div(
+          class = "example",
+          theme = list(.example = list(`margin-left` = 10))
+        )
+        cli::cli_h3("Examples")
+        if (is.character(this_sentence)) {
+          cli::cli_text(cli::col_blue(this_sentence))
+        } else {
+          if (is.character(this_sentence[[writing]])) {
+            # EXAMPLE
+            # romaji: "rossha"
+            cli::cli_text(crayon::blue(this_sentence[[writing]][["text"]]))
+          } else {
+            # EXAMPLE
+            # hira:
+            #  - HIRA
+            #  - transcription: "hira"
+            #  - transliteration: "hira"
+            sentence_tr <- this_sentence[[writing]][["transcription"]]
+            if (is.null(sentence_tr)) {
+              sentence_tr <- this_sentence[[writing]][["transliteration"]]
+            }
+
+            cli::cli_text(crayon::blue(this_sentence[[writing]][["text"]]))
+            cli::cli_text(crayon::blue(sentence_tr))
+          }
+        }
+        cli::cli_text("{sentence$translation} {cli::col_grey(paste0('[', {examples_id}, ']'))}")
+        cli::cli_end(d)
+      } else {
+        d <- cli::cli_div(
+          class = "example",
+          theme = list(.example = list(`margin-left` = 10))
+        )
+        cli::cli_h3("Examples")
+        for (ex in seq_len(length(examples_id))) {
+          cl_st <- stringr::str_split(examples_id, ":")
+          collection <- yaml::read_yaml(
+            file.path(attr(x, "dbpath"), "collections", paste0(cl_st[[ex]][1], ".yaml"))
+          )
+          sentence <- collection$sentences[[cl_st[[ex]][2]]]
+          this_sentence <- sentence$sentence
+
+          if (is.character(this_sentence)) {
+            cli::cli_text(
+              "{cli::col_blue(this_sentence)}
+              [{examples_id[ex]}]
+              "
+            )
+          } else {
+            if (is.character(this_sentence[[writing]])) {
+              # EXAMPLE
+              # romaji: "rossha"
+              cli::cli_text(crayon::blue(this_sentence[[writing]][["text"]]))
+            } else {
+              # EXAMPLE
+              # hira:
+              #  - HIRA
+              #  - transcription: "hira"
+              #  - transliteration: "hira"
+              sentence_tr <- this_sentence[[writing]][["transcription"]]
+              if (is.null(sentence_tr)) {
+                sentence_tr <- this_sentence[[writing]][["transliteration"]]
+              }
+
+              cli::cli_text(crayon::blue(this_sentence[[writing]][["text"]]))
+              cli::cli_text(crayon::blue(sentence_tr))
+            }
+          }
+
+          cli::cli_text("{sentence$translation} {cli::col_grey(paste0('[', {examples_id[ex]}, ']'))}")
+          cli::cli_text(" ")
+        }
+        cli::cli_end(d)
+      }
+    }
+
+  }
+
+  if (!is.null(x$etymology)) {
+    cli::cli_h2("Etymology")
+    cli::cli_div(theme = list(span.etym = list(
+      `font-style` = "italic",
+      color = "blue"
+    )))
+    cli::cli_text(x$etymology)
+    cli::cli_end()
+  }
+
+  cli::cli_h2("Grammatical info")
+  cli::cli_text("{crayon::red('Category:')} {x$morph_category}")
+  cli::cli_text("{crayon::red('Type:')} {x$morph_type}")
+  cli::cli_h2("Allomorphs")
+  for (allo in seq_len(length(x$allomorphs))) {
+    conditioning <- x$allomorphs[[allo]]$condition
+    morph <- x$allomorphs[[allo]]$morph
+
+    if (is.character(morph)) {
+      morph_part <- "{crayon::blue(morph)}"
+    } else {
+      if (is.character(morph[[writing]])) {
+        morph_part <- "{crayon::blue(morph[[writing]])}"
+      } else {
+        morph_tr <- morph[[writing]][["transcription"]]
+        if (is.null(morph_tr)) {
+          morph_tr <- morph[[writing]][["transliteration"]]
+        }
+        morph_part <- "{crayon::blue(morph[[writing]][['text']])} {crayon::blue(paste0('(', morph_tr, ')'))}"
+      }
+    }
+
+    morph_line <- paste(
+      "{cli::col_red(cli::symbol$bullet)}",
+      morph_part,
+      "[{x$allomorphs[[allo]]$phonetic}]
+      {ifelse(!is.null(conditioning), paste0('(',
+      cli::col_green(conditioning$type), ': ',
+      conditioning$context, ')'), '')}"
+    )
+    cli::cli_text(morph_line)
+
+  }
+
+  if (!is.null(x$notes)) {
+    cli::cli_h2("Notes")
+    cli::cli_ul(x$notes)
+  }
+
+}
+
+#' Print method for list of entries
+#'
+#' Print method for the output of `search_lexicon()`, which returns an object
+#'    of class `lexalxs`.
+#'
+#' @param x An object of class `lexalxs`.
+#' @param ... Arguments passed to print.
+#'
+#' @return Nothing. Used for its side effects.
+#' @export
+print.lexalxs <- function(x, ...) {
+  purrr::walk(x, function(i) print.lexalx(i))
+}
+
+#' Compact print method for list of entries
+#'
+#' Compact print method for the output of `search_lexicon()`, which returns an object
+#'    of class `lexalxscompact` when `show_entry` is `FALSE`..
+#'
+#' @param x An object of class `lexalxscompact`.
+#' @param ... Arguments passed to print.
+#'
+#' @return Nothing. Used for its side effects.
+#' @export
+print.lexalxscompact <- function(x, ...) {
+  purrr::walk(
+    x,
+    function(i) {
+      lexeme_line <- "{crayon::blue(i$lexeme)} {.emph {crayon::green(i$part_of_speech)}} {i$senses$se_01$definition} [{crayon::silver(i$id)}]"
+      cli::cli_bullets(c("*" = lexeme_line))
+    }
+  )
 }

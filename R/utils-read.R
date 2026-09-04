@@ -2,8 +2,6 @@
 
 read_lexadb <- function(path) {
   lexadb <- yaml::read_yaml(path)
-  attr(lexadb, "dbpath") <- path
-  structure(lexadb, class = c("lexadb", "list"))
 
   validation <- validate_lexadb(lexadb)
 
@@ -20,6 +18,8 @@ read_lexadb <- function(path) {
     metadata = lexadb$metadata,
     lexicon = lexadb[lx_names]
   )
+  attr(lexadb, "dbpath") <- path
+  class(lexadb) <- c("lexadb", "list")
 
   return(lexadb)
 }
