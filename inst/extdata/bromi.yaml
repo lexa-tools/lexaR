@@ -3,17 +3,11 @@ metadata:
     schema_version: 0.0.0.9001
     name: "ぶろみ, Bromi"
     author: "Stefano Coretta"
-    # languages:
-    #   bro: "Bromi"
-    #   meta:
-    #     eng: "English"
-    #     jpn: "Japanese"
-    # scripts:
-    #   bro:
-    #     hira: "Bromi Hiragana"
-    #     translit: "Bromi transliteration"
-    #   eng: "eng"
-    #   jpn: "jpn"
+    languages:
+      hira: "Bromi (hiragana)"
+      roma: "Bromi (romaji)"
+      eng: "eng"
+      jpn: "jpn"
 lx_000001:
     id: lx_000001
     lexeme:
@@ -21,7 +15,7 @@ lx_000001:
           text: ろっしゃ
           transcription: rossha
           transliteration: roQsh(i)ya
-      romaji: rossha
+      roma: rossha
     phonemic: roʃʃa
     phonetic: ɽɔʃʃa
     word_type: lexical
@@ -37,7 +31,7 @@ lx_000001:
                     text: "うって「おん「ふぉい「さんの"
                     transcription: "utte on foi sanno"
                     transliteration: "uQte on f(u)oi sanno"
-                romaji: "utte on foi sanno"
+                roma: "utte on foi sanno"
                 eng: "lunch, midday meal"
                 jpn: "昼食、昼間に食べる食事"
             examples:
@@ -46,14 +40,14 @@ lx_000001:
                         hira:
                             text: "ふぁろっしゃ「ぎそんの「うっつろい"
                             transcription: "Farossha gisonno uttroi."
-                        romaji: Farossha gisonno uttroi.
+                        roma: Farossha gisonno uttroi.
                     translation: "We are having lunch."
                 ex_02:
                     sentence:
                         hira:
                             text: "ろっしゃ 「しさんの「うったのい"
                             transcription: "Rossha sisonno uttanoi."
-                        romaji: "Rossha sisonno uttanoi."
+                        roma: "Rossha sisonno uttanoi."
                     translation: "We had lunch."
     date_created: 2022-07-24T14:31:47Z
     date_modified: 2022-07-24T14:31:47Z
