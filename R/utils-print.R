@@ -80,17 +80,13 @@ print.lexalx <- function(x, ...) {
   n_senses <- length(x$senses)
   lexeme <- x$lexeme
 
+  lexeme_part <- ""
   if (is.character(lexeme)) {
     lexeme_part <- "{crayon::blue(lexeme)}"
   } else {
-    if (is.character(lexeme[[writing]])) {
-      lexeme_part <- "{crayon::blue(lexeme[[writing]])}"
-    } else {
-      lexeme_tr <- lexeme[[writing]][["transcription"]]
-      if (is.null(lexeme_tr)) {
-        lexeme_tr <- lexeme[[writing]][["transliteration"]]
-      }
-      lexeme_part <- "{crayon::blue(lexeme[[writing]][['text']])} {crayon::blue(paste0('(', lexeme_tr, ')'))}"
+    for (script in lexeme) {
+      text <- if (is.list(script) && !is.null(script$text)) script$text else script
+      lexeme_part <- paste0(lexeme_part, "{crayon::blue('", text, "')} ")
     }
   }
 
@@ -118,20 +114,33 @@ print.lexalx <- function(x, ...) {
   cli::cli_h2("Senses")
   for (sense in 1:length(x$senses)) {
     definitions <- x$senses[[sense]]$definition
-    if (length(definitions) > 1) {
-      definitions_langs <- names(definitions)
-      definitions[[the_language]] <- NULL
-      definition_part <- paste(definitions, collapse = ". ")
-    } else {
-      definition_part <- definitions[[1]]
+
+    for (i in seq_along(definitions)) {
+      lang <- names(definitions)[i]
+      definition <- definitions[[i]]
+
+      text <- if (is.list(definition) && !is.null(definition$text)) {
+        definition$text
+      } else {
+        definition
+      }
+
+      if (i == 1) {
+        cli::cli_text(
+          "{cli::col_red(sense, '.')} {orange(lang)} {text}"
+        )
+      } else {
+        d <- cli::cli_div(
+          class = "definition",
+          theme = list(.definition = list(`margin-left` = 3))
+        )
+        cli::cli_text(
+          "{orange(lang)} {text}"
+        )
+        cli::cli_end(d)
+      }
     }
-    if (!is.null(x$senses[[sense]]$grammatical_features)) {
-      cli::cli_text("{cli::col_red(sense, '.')}
-        {crayon::blue('(', x$senses[[sense]]$grammatical_features, ')', sep = '')}
-        {definition_part}")
-    } else {
-      cli::cli_text("{cli::col_red(sense, '.')} {definition_part}")
-    }
+
     if (!is.null(x$senses[[sense]]$examples)) {
       d <- cli::cli_div(
         class = "example",
@@ -139,8 +148,22 @@ print.lexalx <- function(x, ...) {
       )
       cli::cli_h3("Examples")
       for (example in x$senses[[sense]]$examples) {
+        sentence_part <- ""
+        if (is.character(example)) {
+          sentence_part <- "{crayon::blue(example)}"
+        } else {
+          for (i in seq_along(example$sentence)) {
+            script <- example$sentence[[i]]
+            text <- if (is.list(script) && !is.null(script$text)) script$text else script
+            if (i < length(example$sentence)) {
+              sentence_part <- paste0(sentence_part, " {crayon::blue('", text, "')} {cli::symbol$en_dash} ")
+            } else {
+              sentence_part <- paste0(sentence_part, " {crayon::blue('", text, "')} ")
+            }
+          }
+        }
         cli::cli_text(
-          "{cli::symbol$bullet} {crayon::blue(example$sentence)} {example$translation}"
+          paste0("{cli::symbol$bullet}", sentence_part, "{example$translation}")
         )
       }
       cli::cli_end(d)
@@ -208,3 +231,5 @@ markdown_to_cli <- function(x) {
   x <- gsub("_(.*?)_", "{cli::style_italic('\\1')}", x)
   x
 }
+
+orange <- crayon::make_style("orange")
