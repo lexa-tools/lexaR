@@ -1,45 +1,25 @@
 # Lexa read functions ----
 
-read_config <- function(path) {
-  yaml::read_yaml(file.path(path, "config.yaml"))
-}
+read_lexadb <- function(path) {
+  lexadb <- yaml::read_yaml(path)
+  attr(lexadb, "dbpath") <- path
+  structure(lexadb, class = c("lexadb", "list"))
 
-read_lexicon <- function(path) {
-  lexicon_path <- file.path(path, "lexicon")
-  lexicon_files <- list.files(lexicon_path, full.names = TRUE)
-  lexicon <- lapply(lexicon_files, function(lexeme) {
-      lx <- yaml::read_yaml(lexeme)
-      attr(lx, "dbpath") <- path
-      structure(lx, class = c("lexalx", "list"))
-    }
+  validation <- validate_lexadb(lexadb)
+
+  if (!validation) {
+    cli::cli_alert_danger("The lexadb does not match the expected schema.")
+    validation_tbl <- tibble::as_tibble(attr(validation, "errors")[,c("instancePath", "message")])
+    validation_tbl <- dplyr::rename(validation_tbl, path = instancePath, problem = message)
+    print(validation_tbl)
+    return(validation_tbl)
+  }
+
+  lx_names <- grep("^lx_[0-9]+$", names(lexadb), value = TRUE)
+  lexadb <- list(
+    metadata = lexadb$metadata,
+    lexicon = lexadb[lx_names]
   )
-  lx_ids <- lapply(lexicon, function(x) x[["id"]])
-  names(lexicon) <- lx_ids
-  lexicon
-}
 
-read_grammar <- function(path) {
-  yaml::read_yaml(file.path(path, "grammar.yaml"))
-}
-
-read_collections <- function(path) {
-  collections_path <- file.path(path, "collections")
-  collections_files <- list.files(collections_path, full.names = TRUE)
-  collections <- lapply(collections_files, function(collection) {
-      cl <- yaml::read_yaml(collection)
-      cl <- structure(cl, class = c("lexacl", "list"))
-      return(cl)
-    }
-  )
-  collections <- lapply(collections, function(collection) {
-    sent_i <- lapply(collection$sentences, function(sent) {
-      st <- structure(sent, class = c("lexast", "list"))
-      return(st)
-    })
-    collection$sentences <- sent_i
-    return(collection)
-  })
-  collections_ids <- lapply(collections, function(x) x[["id"]])
-  names(collections) <- collections_ids
-  return(collections)
+  return(lexadb)
 }

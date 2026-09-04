@@ -19,7 +19,7 @@
                 },
                 "schema_version": {
                 "type": "string",
-                "const": "0.0.0.9000"
+                "const": "0.0.0.9001"
                 },
                 "name": {
                 "type": "string"
@@ -137,17 +137,28 @@
                                     }
                                 },
                                 "examples": {
-                                    "oneOf": [
-                                        {
-                                            "type": "string"
-                                        },
-                                        {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "string"
+                                    "type": "object",
+                                    "additionalProperties": false,
+                                    "patternProperties": {
+                                      "^ex_\\d+$": {
+                                          "type": "object",
+                                          "properties": {
+                                            "sentence": {
+                                              "oneOf": [
+                                                  {
+                                                      "type": "string"
+                                                  },
+                                                  {
+                                                      "$ref": "#/definitions/writing"
+                                                  }
+                                              ]
+                                            },
+                                            "translation": {
+                                              "type": "string"
                                             }
-                                        }
-                                    ]
+                                          }
+                                      }
+                                    }
                                 },
                                 "etymology": {
                                     "type": "string"

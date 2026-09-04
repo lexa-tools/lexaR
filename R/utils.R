@@ -89,3 +89,16 @@ validate_collections <- function(lexadb) {
     )
   }
 }
+
+validate_lexadb <- function(lexadb) {
+  if (lexadb$metadata$schema_version == "0.0.0.9001") {
+    lexadb_json <- jsonlite::toJSON(lexadb, auto_unbox = TRUE)
+    validated <- jsonvalidate::json_validate(
+      lexadb_json,
+      system.file("extdata/json-schemas/0.0.0.9001/lexadb-schema.json", package = "lexaR"),
+      verbose = TRUE,
+      engine = "ajv"
+    )
+    return(validated)
+  }
+}
