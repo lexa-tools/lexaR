@@ -100,5 +100,7 @@ validate_lexadb <- function(lexadb) {
       engine = "ajv"
     )
     return(validated)
+  } else {
+    cli::cli_abort(c("x" = "Validation scheme not supported: {lexadb$metadata$schema_version}."))
   }
 }

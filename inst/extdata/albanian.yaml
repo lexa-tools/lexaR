@@ -1,6 +1,6 @@
 metadata:
     schema: lexadb
-    schema_version: 0.0.0.9000
+    schema_version: 0.0.0.9001
     name: Albanian
     author: Stefano Coretta
 lx_000001:
