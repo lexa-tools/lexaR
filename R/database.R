@@ -1,3 +1,9 @@
+#' Open connection to Lexa database
+#'
+#' @param path Path to Lexa database file.
+#'
+#' @return A lexadb connection (`lexacon` object).
+#' @export
 load_lexadb <- function(path) {
   lexadb <- yaml::read_yaml(path)
 
@@ -18,26 +24,6 @@ load_lexadb <- function(path) {
   class(lexadb_con) <- c("lexacon", "list")
 
   return(lexadb_con)
-}
-
-read_lexadb <- function(lexadb_con) {
-  dbpath <- lexadb_con$dbpath
-
-  lexadb_yaml <- yaml::read_yaml(dbpath)
-  lx_names <- grep("^lx_[0-9]+$", names(lexadb_yaml), value = TRUE)
-  lexadb <- list(
-    metadata = lexadb_yaml$metadata,
-    lexicon = lexadb_yaml[lx_names]
-  )
-  lexadb$lexicon <- lapply(
-    lexadb$lexicon,
-    function(x) {
-      class(x) <- "lexalx"
-      x
-    }
-  )
-
-  return(lexadb)
 }
 
 #' Create a new Lexa database
@@ -74,55 +60,28 @@ create_lexadb <- function(name, parent = ".", author = NULL) {
   return(lexadb_con)
 }
 
-
-new_lexadb <- function(name, author, schema_version) {
-  metadata <- list(
-    schema = "lexadb",
-    schema_version = schema_version,
-    name = name,
-    author = ifelse(is.null(author), Sys.info()[["user"]], author)
-  )
-
-  now <- format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
-
-  lx_000001 <- list(
-    id = "lx_000001",
-    lexeme = "rat",
-    word_type = "stem",
-    word_class = "noun",
-    senses = list(
-      se_01 = list(
-        id = "se_01",
-        gloss = "rat",
-        definition = "a sweet and very sociable rodent"
-      )
-    ),
-    date_created = now,
-    date_modified = now
-  )
-
-  lexadb <- list(
-    metadata = metadata,
-    lx_000001 = lx_000001
-  )
-  class(lexadb) <- c("lexadb", "list")
-
-  return(lexadb)
-}
-
-write_lexadb <- function(lexadb, path) {
-  yaml::write_yaml(lexadb, file.path(path))
-}
-
+#' Add entry to lexicon
+#'
+#' This function creates a new entry in the lexicon, i.e. a new empty entry
+#' skeleton is written to disk, in the `lexicon/` directory, for the user
+#' to edit at will.
+#'
+#' @param lexacon A `lexacon` object (created with \code{\link{load_lexadb}}).
+#' @param lexeme The entry as a string.
+#' @param gloss The gloss as a string.
+#' @param word_type The type of lexical entry (root, stem, affix, clitic, particle, compound, phrase).
+#' @param word_class The word class of the lexical entry.
+#' @param definition The definition of the entry as a string.
+#' @param homophone The homophone numeric index.
+#'
+#' @return Nothing. Used for its side effects
 add_entry <- function(lexacon,
-                    lexeme,
-                    gloss,
-                    word_type = NULL,
-                    word_class = NULL,
-                    morph_category = NULL,
-                    morph_type = NULL,
-                    definition = gloss,
-                    homophone = NULL) {
+                      lexeme,
+                      gloss,
+                      word_type = NULL,
+                      word_class = NULL,
+                      definition = gloss,
+                      homophone = NULL) {
 
   if (!("lexacon" %in% class(lexacon))) {
     cli::cli_abort(c("x" = "'{lexacon}' is not a lexadb connection!"))
@@ -193,3 +152,63 @@ add_entry <- function(lexacon,
   cli::cli_alert_success("Entry '{lx_id}' added!")
 
 }
+
+new_lexadb <- function(name, author, schema_version) {
+  metadata <- list(
+    schema = "lexadb",
+    schema_version = schema_version,
+    name = name,
+    author = ifelse(is.null(author), Sys.info()[["user"]], author)
+  )
+
+  now <- format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
+
+  lx_000001 <- list(
+    id = "lx_000001",
+    lexeme = "rat",
+    word_type = "stem",
+    word_class = "noun",
+    senses = list(
+      se_01 = list(
+        id = "se_01",
+        gloss = "rat",
+        definition = "a sweet and very sociable rodent"
+      )
+    ),
+    date_created = now,
+    date_modified = now
+  )
+
+  lexadb <- list(
+    metadata = metadata,
+    lx_000001 = lx_000001
+  )
+  class(lexadb) <- c("lexadb", "list")
+
+  return(lexadb)
+}
+
+read_lexadb <- function(lexadb_con) {
+  dbpath <- lexadb_con$dbpath
+
+  lexadb_yaml <- yaml::read_yaml(dbpath)
+  lx_names <- grep("^lx_[0-9]+$", names(lexadb_yaml), value = TRUE)
+  lexadb <- list(
+    metadata = lexadb_yaml$metadata,
+    lexicon = lexadb_yaml[lx_names]
+  )
+  lexadb$lexicon <- lapply(
+    lexadb$lexicon,
+    function(x) {
+      class(x) <- "lexalx"
+      x
+    }
+  )
+
+  return(lexadb)
+}
+
+write_lexadb <- function(lexadb, path) {
+  yaml::write_yaml(lexadb, file.path(path))
+}
+
