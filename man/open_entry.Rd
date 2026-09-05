@@ -2,7 +2,7 @@
 % Please edit documentation in R/lexicon.R
 \name{open_entry}
 \alias{open_entry}
-\title{Open a lexical entry}
+\title{Add entry to lexicon}
 \usage{
 open_entry(lexadb, entry_id)
 }
@@ -11,10 +11,40 @@ open_entry(lexadb, entry_id)
 
 \item{entry_id}{A string with the entry id (the \code{lx_} prefix and leading
 zeros can be omitted.)}
+
+\item{lexeme}{The entry as a string.}
+
+\item{gloss}{The gloss as a string.}
+
+\item{part_of_speech}{The part of speech as a string.}
+
+\item{phonetic}{The phonetic transcription as a string.}
+
+\item{morph_category}{The morphosyntactic category as a string
+(\code{"lexical"} or \code{"grammatical"}).}
+
+\item{morph_type}{The type of morpheme as a string.}
+
+\item{definition}{The definition of the entry as a string.}
+
+\item{etymology}{The etymology of the entry as a string.}
+
+\item{notes}{Further notes as a string.}
+
+\item{homophone}{The homophone numeric index.}
+
+\item{edit}{Open file for editing after creation (default is \code{TRUE})}
 }
 \value{
 Nothing. Used for its side effects
+Open a lexical entry
+
+It opens the file of the specified lexical entry.
+
+Nothing. Used for its side effects
 }
 \description{
-It opens the file of the specified lexical entry.
+This function creates a new entry in the lexicon, i.e. a new empty entry
+skeleton is written to disk, in the \verb{lexicon/} directory, for the user
+to edit at will.
 }

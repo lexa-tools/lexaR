@@ -21,41 +21,7 @@
 #' @param edit Open file for editing after creation (default is `TRUE`)
 #'
 #' @return Nothing. Used for its side effects
-#' @export
-add_entry <- function(lexadb,
-                      lexeme = NULL,
-                      gloss = NULL,
-                      part_of_speech = NULL,
-                      phonetic = NULL,
-                      morph_category = NULL,
-                      morph_type = NULL,
-                      definition = gloss,
-                      etymology = NULL,
-                      notes = NULL,
-                      homophone = NULL,
-                      edit = TRUE) {
 
-  lx_entry <- construct_entry(
-    lexadb,
-    lexeme = lexeme,
-    gloss = gloss,
-    part_of_speech = part_of_speech,
-    phonetic = phonetic,
-    morph_category = morph_category,
-    morph_type = morph_type,
-    definition = definition,
-    etymology = etymology,
-    notes = notes,
-    homophone = homophone
-  )
-
-  write_entry(lexadb, lx_entry)
-  cli::cli_alert_success("Entry {cli::col_blue(lx_entry$id)} added to the lexicon!")
-
-  if (edit) {
-    edit_entry(lexadb, lx_entry$id)
-  }
-}
 
 # Open and edit entries ----
 

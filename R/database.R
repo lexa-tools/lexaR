@@ -114,91 +114,65 @@ write_lexadb <- function(lexadb, path) {
   yaml::write_yaml(lexadb, file.path(path))
 }
 
-
-
-construct_entry <- function(lexadb,
-                    lexeme = NULL,
-                    gloss = NULL,
+add_entry <- function(lexacon,
+                    lexeme,
+                    gloss,
                     word_type = NULL,
                     word_class = NULL,
-                    phonemic = NULL,
-                    phonetic = NULL,
                     morph_category = NULL,
                     morph_type = NULL,
                     definition = gloss,
-                    etymology = NULL,
-                    notes = NULL,
                     homophone = NULL) {
 
-  # Write default examples if mandatory fields are NULL
-  # Used when initialising lexadb
-  if (is.null(lexeme)) {
-    lexeme = "lexeme"
+  if (!("lexacon" %in% class(lexacon))) {
+    cli::cli_abort(c("x" = "'{lexacon}' is not a lexadb connection!"))
   }
+
   if (is.null(word_type)) {
     word_type = "stem"
   }
   if (is.null(word_class)) {
-    word_class = "noun"
-  }
-  if (is.null(gloss)) {
-    gloss = "lexeme"
+    word_class = ""
   }
 
-  if (!is.null(lexadb)) {
-    db_path <- attr(lexadb, "meta")$path
-    entries <- lapply(
-      read_lexicon(db_path),
-      function(entry) entry$lexeme
+  db_path <- lexacon$dbpath
+  lexadb <- read_lexadb(lexacon)
+  entries <- lapply(
+    lexadb$lexicon,
+    function(entry) entry$lexeme
+  )
+
+  if (lexeme %in% entries) {
+    homophones_n <- sum(entries == lexeme)
+    cli::cli_alert_warning(
+      cli::pluralize("{homophones_n} homophone{?s} found!")
+    )
+    cont <- usethis::ui_yeah(
+      "Continue?",
+      yes = "Yes",
+      no = "No",
+      shuffle = FALSE
     )
 
-    if (!is.null(lexeme)) {
-      if (lexeme %in% entries) {
-        homophones_n <- sum(entries == lexeme)
-        cli::cli_alert_warning(
-          cli::pluralize("{homophones_n} homophone{?s} found!")
-        )
-        cont <- usethis::ui_yeah(
-          "Continue?",
-          yes = "Yes",
-          no = "No",
-          shuffle = FALSE
-        )
-
-        if (!cont) {
-          return(cli::cli_alert_warning("Entry not created!"))
-        } else (
-          homophone <- homophones_n + 1L
-        )
-      }
-    }
-
-    lx_id <- generate_lx_id(lexadb)
-  } else {
-    lx_id <- generate_lx_id(NULL)
+    if (!cont) {
+      return(cli::cli_alert_warning("Entry not created!"))
+    } else (
+      homophone <- homophones_n + 1L
+    )
   }
+
+  lx_id <- generate_lx_id(lexadb)
 
   today <- format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
 
+  new_lx <- list()
   # entry schema
-  out <- list(
+  new_lx[[lx_id]] <- list(
     id = lx_id,
     lexeme = lexeme,
-    phonetic = phonetic,
-    morph_category = morph_category,
-    morph_type = morph_type,
-    part_of_speech = part_of_speech,
-    # inflectional_features = list(class = NULL),
-    etymology = etymology,
-    notes = notes,
+    word_type = word_type,
+    word_class = word_class,
     homophone = homophone,
-    allomorphs = list(
-      al_01 = list(
-        id = "al_01",
-        morph = lexeme,
-        phonetic = phonetic
-      )
-    ),
     senses = list(
       se_01 = list(
         id = "se_01",
@@ -211,9 +185,11 @@ construct_entry <- function(lexadb,
   )
 
   # Drop null fields
-  out <- remove_null_fields(out)
+  new_lx[[lx_id]] <- remove_null_fields(new_lx[[lx_id]])
 
-  entry <- list(id = lx_id, out = out)
-  return(entry)
+  out <- yaml::as.yaml(new_lx)
+
+  cat(out, file = db_path, append = TRUE, sep = "")
+  cli::cli_alert_success("Entry '{lx_id}' added!")
 
 }
