@@ -25,3 +25,12 @@ validate_lexadb <- function(lexacon) {
     cli::cli_abort(c("x" = "Validation scheme not supported: {lexacon$metadata$schema_version}."))
   }
 }
+
+remove_null_fields <- function(x) {
+  if (is.list(x)) {
+    # Following commented line makes no sense
+    # x <- lapply(x, remove_nulls_and_empty)
+    x <- x[!sapply(x, function(y) is.null(y) || (is.list(y) && length(y) == 0))]
+  }
+  x
+}
