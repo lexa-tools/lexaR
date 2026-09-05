@@ -1,9 +1,51 @@
+load_lexadb <- function(path) {
+  lexadb <- yaml::read_yaml(path)
+
+  validation <- validate_lexadb(lexadb)
+
+  if (!validation) {
+    cli::cli_alert_danger("The lexadb does not match the expected schema.")
+    validation_tbl <- tibble::as_tibble(attr(validation, "errors")[,c("instancePath", "message")])
+    validation_tbl <- dplyr::rename(validation_tbl, path = instancePath, problem = message)
+    print(validation_tbl)
+    return(validation_tbl)
+  }
+
+  lexadb_con <- list(
+    metadata = lexadb$metadata,
+    dbpath = normalizePath(path)
+  )
+  class(lexadb_con) <- c("lexacon", "list")
+
+  return(lexadb_con)
+}
+
+read_lexadb <- function(lexadb_con) {
+  dbpath <- lexadb_con$dbpath
+
+  lexadb_yaml <- yaml::read_yaml(dbpath)
+  lx_names <- grep("^lx_[0-9]+$", names(lexadb_yaml), value = TRUE)
+  lexadb <- list(
+    metadata = lexadb_yaml$metadata,
+    lexicon = lexadb_yaml[lx_names]
+  )
+  lexadb$lexicon <- lapply(
+    lexadb$lexicon,
+    function(x) {
+      class(x) <- "lexalx"
+      x
+    }
+  )
+
+  return(lexadb)
+}
+
 #' Create a new Lexa database
 #'
 #' @param name Name of the Lexa database (the `.yaml` extension will be appended to the name automatically).
 #' @param parent Parent directory (default is current working directory).
 #'
-#' @return Nothing. Used for its side effects.
+#' @return A lexadb connection.
 #' @export
 #'
 #' @examples
@@ -22,10 +64,14 @@ create_lexadb <- function(name, parent = ".", author = NULL) {
 
   dir.create(parent, FALSE, TRUE)
   write_lexadb(lexadb, path)
-  attr(lexadb, "dbpath") <- normalizePath(path)
 
-  return(lexadb)
+  lexadb_con <- list(
+    metadata = lexadb$metadata,
+    dbpath = normalizePath(path)
+  )
+  class(lexadb_con) <- c("lexacon", "list")
 
+  return(lexadb_con)
 }
 
 
@@ -39,28 +85,25 @@ new_lexadb <- function(name, author, schema_version) {
 
   now <- format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
 
-  lexicon <- list(
-    lx_000001 = list(
-      id = "lx_000001",
-      lexeme = "rat",
-      word_type = "stem",
-      word_class = "noun",
-      senses = list(
-        se_01 = list(
-          id = "se_01",
-          gloss = "rat",
-          definition = "a sweet and very sociable rodent"
-        )
-      ),
-      date_created = now,
-      date_modified = now
-    )
+  lx_000001 <- list(
+    id = "lx_000001",
+    lexeme = "rat",
+    word_type = "stem",
+    word_class = "noun",
+    senses = list(
+      se_01 = list(
+        id = "se_01",
+        gloss = "rat",
+        definition = "a sweet and very sociable rodent"
+      )
+    ),
+    date_created = now,
+    date_modified = now
   )
-  class(lexicon$lx_000001) <- c("lexalx")
 
   lexadb <- list(
     metadata = metadata,
-    lexicon = lexicon
+    lx_000001 = lx_000001
   )
   class(lexadb) <- c("lexadb", "list")
 

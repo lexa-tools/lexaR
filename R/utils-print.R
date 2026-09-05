@@ -2,19 +2,19 @@
 
 #' Print method for Lexa databases
 #'
-#' Print method for objects of class `lexadb`, which prints database info and
+#' Print method for objects of class `lexacon`, which prints database info and
 #' statistics.
 #'
-#' @param x An object of class `lexadb`.
+#' @param x An object of class `lexacon`.
 #' @param ... Arguments passed to print.
 #'
 #' @return Nothing. Used for its side effects.
 #' @export
 #'
-print.lexadb <- function(x, ...) {
-  db_path <- attr(x, "metadata")$dbpath
+print.lexacon <- function(x, ...) {
+  lexadb <- read_lexadb(x)
 
-  lexicon <- x$lexicon
+  lexicon <- lexadb$lexicon
   lexicon_length <- length(lexicon)
 
   wtypes <- table(unlist(lapply(lexicon, function(x) x$word_type)))

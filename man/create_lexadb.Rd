@@ -4,7 +4,7 @@
 \alias{create_lexadb}
 \title{Create a new Lexa database}
 \usage{
-create_lexadb(name, parent = ".")
+create_lexadb(name, parent = ".", author = NULL)
 }
 \arguments{
 \item{name}{Name of the Lexa database (the \code{.yaml} extension will be appended to the name automatically).}
@@ -12,7 +12,7 @@ create_lexadb(name, parent = ".")
 \item{parent}{Parent directory (default is current working directory).}
 }
 \value{
-Nothing. Used for its side effects.
+A lexadb connection.
 }
 \description{
 Create a new Lexa database
