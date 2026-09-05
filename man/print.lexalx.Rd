@@ -4,7 +4,7 @@
 \alias{print.lexalx}
 \title{Print method for lexemes}
 \usage{
-\method{print}{lexalx}(x, writing = NULL, ...)
+\method{print}{lexalx}(x, ...)
 }
 \arguments{
 \item{x}{An object of class \code{lexalx}.}

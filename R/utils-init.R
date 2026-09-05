@@ -2,15 +2,7 @@
 # These functions initialise different parts of a Lexa database. They are used
 # when creating a new Lexa database with `create_lexadb()`.
 
-init_config <- function(path, name, schema_version = "0.0.0.9000") {
-  config <- list(
-    schema = "lexadb",
-    schema_version = schema_version,
-    name = name,
-    author = ""
-  )
-  yaml::write_yaml(config, file.path(path, "config.yaml"))
-}
+
 
 init_lexicon <- function(path) {
   dir.create(file.path(path, "lexicon"), FALSE, TRUE)
@@ -37,108 +29,7 @@ init_collections <- function(path) {
 # Prepare empty entry skeleton.
 # Outputs a list with entry id (`id`) and output list (`out`).
 
-construct_entry <-  function(lexadb = NULL,
-                          lexeme = NULL,
-                          gloss = NULL,
-                          part_of_speech = NULL,
-                          phonetic = NULL,
-                          morph_category = NULL,
-                          morph_type = NULL,
-                          definition = gloss,
-                          etymology = NULL,
-                          notes = NULL,
-                          homophone = NULL) {
 
-  # Write default examples if mandatory fields are NULL
-  # Used when initialising lexadb
-  if (is.null(lexeme)) {
-    lexeme = "lexeme"
-  }
-  if (is.null(part_of_speech)) {
-    part_of_speech = "noun"
-  }
-  if (is.null(morph_category)) {
-    morph_category = "lexical"
-  }
-  if (is.null(morph_type)) {
-    morph_type = "stem"
-  }
-  if (is.null(gloss)) {
-    gloss = "lexeme"
-  }
-
-  if (!is.null(lexadb)) {
-    db_path <- attr(lexadb, "meta")$path
-    entries <- lapply(
-      read_lexicon(db_path),
-      function(entry) entry$lexeme
-    )
-
-    if (!is.null(lexeme)) {
-      if (lexeme %in% entries) {
-        homophones_n <- sum(entries == lexeme)
-        cli::cli_alert_warning(
-          cli::pluralize("{homophones_n} homophone{?s} found!")
-        )
-        cont <- usethis::ui_yeah(
-          "Continue?",
-          yes = "Yes",
-          no = "No",
-          shuffle = FALSE
-        )
-
-        if (!cont) {
-          return(cli::cli_alert_warning("Entry not created!"))
-        } else (
-          homophone <- homophones_n + 1L
-        )
-      }
-    }
-
-    lx_id <- generate_lx_id(lexadb)
-  } else {
-    lx_id <- generate_lx_id(NULL)
-  }
-
-  today <- as.character(Sys.time())
-
-  # entry schema
-  out <- list(
-    id = lx_id,
-    lexeme = lexeme,
-    phonetic = phonetic,
-    morph_category = morph_category,
-    morph_type = morph_type,
-    part_of_speech = part_of_speech,
-    # inflectional_features = list(class = NULL),
-    etymology = etymology,
-    notes = notes,
-    homophone = homophone,
-    allomorphs = list(
-      al_01 = list(
-        id = "al_01",
-        morph = lexeme,
-        phonetic = phonetic
-      )
-    ),
-    senses = list(
-      se_01 = list(
-        id = "se_01",
-        gloss = gloss,
-        definition = definition
-      )
-    ),
-    date_created = today,
-    date_modified = today
-  )
-
-  # Drop null fields
-  out <- remove_null_fields(out)
-
-  entry <- list(id = lx_id, out = out)
-  return(entry)
-
-}
 
 
 # Remove null fields

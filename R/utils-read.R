@@ -25,7 +25,7 @@ read_lexadb <- function(path) {
       x
     }
   )
-  attr(lexadb, "dbpath") <- path
+  attr(lexadb, "dbpath") <- normalizePath(path)
   class(lexadb) <- c("lexadb", "list")
 
   return(lexadb)

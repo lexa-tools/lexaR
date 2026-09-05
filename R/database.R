@@ -1,94 +1,176 @@
 #' Create a new Lexa database
 #'
+#' @param name Name of the Lexa database (the `.yaml` extension will be appended to the name automatically).
 #' @param parent Parent directory (default is current working directory).
-#' @param name Name of the Lexa database (`_lexadb` will be appended to the
-#'   name).
 #'
 #' @return Nothing. Used for its side effects.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' create_lexadb(parent = "./", name = "my_new")
+#' create_lexadb(name = "my_db")
 #' }
-create_lexadb <- function(parent = ".", name) {
-  name_db <- paste0(name, "_lexadb")
-  path <- file.path(parent, name_db)
+create_lexadb <- function(name, parent = ".", author = NULL) {
+  file <- paste0(name, ".yaml")
+  path <- file.path(parent, file)
 
-  if (dir.exists(path)) {
-    cli::cli_abort("LexaDB '{name_db}' already exists!")
-  }
-  
-  dir.create(path, FALSE, TRUE)
-
-  init_config(path, name)
-  init_lexicon(path)
-  init_collections(path)
-}
-
-#' Load Lexa database
-#'
-#' It loadds a Lexa database from the specified path. The path is the directory
-#' containing the database.
-#'
-#' @param path The path to the database as a string.
-#'
-#' @return A `lexadb` object.
-#' @export
-#'
-#' @examples
-#' db_path <- system.file("extdata/albanian_lexadb", package = "lexaR")
-#' albanian <- load_lexadb(db_path)
-#' albanian
-#'
-load_lexadb <- function(path) {
-  if (!file.exists(file.path(path, "config.yaml"))) {
-    cli::cli_abort(
-      c("There is no {.file config.yaml}.", "x" = "LexaDB not loaded.")
-    )  
+  if (file.exists(normalizePath(path, mustWork = FALSE))) {
+    cli::cli_abort(c("x" = "LexaDB '{file}' already exists!"))
   }
 
-  config <- read_config(path)
+  lexadb <- new_lexadb(name, author, schema_version = "0.0.0.9001")
 
-  # Do not go past this if the schema version is unknown
-  if (!(config$schema_version %in% c("0.0.0.9000"))) {
-    cli::cli_abort(c("LexaDB schema version not recognised: {config$schema_version}.", "x" = "LexaDB not loaded."))
-  }
-
-  config_val <- validate_config(config)
-
-  if (!config_val) {
-    cli::cli_abort(c("{.file config.yaml} is not valid.", "x" = "LexaDB not loaded."))
-  }
-
-  cli::cli_alert_info("Loading: {.strong {config$name}}")
-
-  lexadb <- list(
-    config = config
-  )
-
-  class(lexadb) <- c("lexadb", "list")
-  attr(lexadb, "meta") <- list(
-    path = normalizePath(path)
-  )
-
-  lx_val <- validate_lexicon(lexadb)
-  if (any(!unlist(lx_val))) {
-    invalid_ids <- names(lx_val[lx_val == FALSE])
-    cli::cli_alert_danger("The lexicon has entries that do not match the expected schema:")
-    cli::cli_li(invalid_ids)
-  } else {
-    cli::cli_alert_success("Lexicon is valid.")
-  }
-
-  cl_val <- validate_collections(lexadb)
-  if (any(!unlist(cl_val))) {
-    invalid_ids <- names(cl_val[cl_val == FALSE])
-    cli::cli_alert_danger("The collections have entries that do not match the expected schema:")
-    cli::cli_li(invalid_ids)
-  } else {
-    cli::cli_alert_success("Collections are valid.")
-  }
+  dir.create(parent, FALSE, TRUE)
+  write_lexadb(lexadb, path)
+  attr(lexadb, "dbpath") <- normalizePath(path)
 
   return(lexadb)
+
+}
+
+
+new_lexadb <- function(name, author, schema_version) {
+  metadata <- list(
+    schema = "lexadb",
+    schema_version = schema_version,
+    name = name,
+    author = ifelse(is.null(author), Sys.info()[["user"]], author)
+  )
+
+  now <- format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
+
+  lexicon <- list(
+    lx_000001 = list(
+      id = "lx_000001",
+      lexeme = "rat",
+      word_type = "stem",
+      word_class = "noun",
+      senses = list(
+        se_01 = list(
+          id = "se_01",
+          gloss = "rat",
+          definition = "a sweet and very sociable rodent"
+        )
+      ),
+      date_created = now,
+      date_modified = now
+    )
+  )
+  class(lexicon$lx_000001) <- c("lexalx")
+
+  lexadb <- list(
+    metadata = metadata,
+    lexicon = lexicon
+  )
+  class(lexadb) <- c("lexadb", "list")
+
+  return(lexadb)
+}
+
+write_lexadb <- function(lexadb, path) {
+  yaml::write_yaml(lexadb, file.path(path))
+}
+
+
+
+construct_entry <- function(lexadb,
+                    lexeme = NULL,
+                    gloss = NULL,
+                    word_type = NULL,
+                    word_class = NULL,
+                    phonemic = NULL,
+                    phonetic = NULL,
+                    morph_category = NULL,
+                    morph_type = NULL,
+                    definition = gloss,
+                    etymology = NULL,
+                    notes = NULL,
+                    homophone = NULL) {
+
+  # Write default examples if mandatory fields are NULL
+  # Used when initialising lexadb
+  if (is.null(lexeme)) {
+    lexeme = "lexeme"
+  }
+  if (is.null(word_type)) {
+    word_type = "stem"
+  }
+  if (is.null(word_class)) {
+    word_class = "noun"
+  }
+  if (is.null(gloss)) {
+    gloss = "lexeme"
+  }
+
+  if (!is.null(lexadb)) {
+    db_path <- attr(lexadb, "meta")$path
+    entries <- lapply(
+      read_lexicon(db_path),
+      function(entry) entry$lexeme
+    )
+
+    if (!is.null(lexeme)) {
+      if (lexeme %in% entries) {
+        homophones_n <- sum(entries == lexeme)
+        cli::cli_alert_warning(
+          cli::pluralize("{homophones_n} homophone{?s} found!")
+        )
+        cont <- usethis::ui_yeah(
+          "Continue?",
+          yes = "Yes",
+          no = "No",
+          shuffle = FALSE
+        )
+
+        if (!cont) {
+          return(cli::cli_alert_warning("Entry not created!"))
+        } else (
+          homophone <- homophones_n + 1L
+        )
+      }
+    }
+
+    lx_id <- generate_lx_id(lexadb)
+  } else {
+    lx_id <- generate_lx_id(NULL)
+  }
+
+  today <- format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
+
+  # entry schema
+  out <- list(
+    id = lx_id,
+    lexeme = lexeme,
+    phonetic = phonetic,
+    morph_category = morph_category,
+    morph_type = morph_type,
+    part_of_speech = part_of_speech,
+    # inflectional_features = list(class = NULL),
+    etymology = etymology,
+    notes = notes,
+    homophone = homophone,
+    allomorphs = list(
+      al_01 = list(
+        id = "al_01",
+        morph = lexeme,
+        phonetic = phonetic
+      )
+    ),
+    senses = list(
+      se_01 = list(
+        id = "se_01",
+        gloss = gloss,
+        definition = definition
+      )
+    ),
+    date_created = today,
+    date_modified = today
+  )
+
+  # Drop null fields
+  out <- remove_null_fields(out)
+
+  entry <- list(id = lx_id, out = out)
+  return(entry)
+
 }
