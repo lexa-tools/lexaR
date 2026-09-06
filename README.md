@@ -5,7 +5,7 @@
 
 <!-- badges: start -->
 
-[![](https://img.shields.io/badge/devel%20version-0.0.3.9000-orange.svg)](https://github.com/stefanocoretta/lexa)
+[![](https://img.shields.io/badge/devel%20version-0.0.3-orange.svg)](https://github.com/stefanocoretta/lexa)
 <!-- badges: end -->
 
 The goal of lexa is to provide a framework and tools to manage
@@ -41,22 +41,16 @@ To create a new database:
 ``` r
 library(lexaR)
 
-create_lexadb(
-  parent = "./",
-  name = "new"
-)
+create_lexadb(name = "my_db")
 ```
 
-This will create a directory `new_lexadb/` in the parent directory
-(`./`). See `vignette("database-schema", package = "lexaR")` for details.
+This will create a file `my_db.yaml` in the current directory. See
+`vignette("database-schema", package = "lexaR")` for details.
 
-The `lexicon/` folder is populated with a file with an entry skeleton
-you can manually edit.
-
-To create new entries you first need to load the database:
+To create new lexical entries you first need to load the database:
 
 ``` r
-new_db <- load_lexadb("./new_lexadb")
+new_db <- load_lexadb("my_db.yaml")
 
 new_db
 ```
@@ -64,124 +58,54 @@ new_db
 Now you can add a new entry with:
 
 ``` r
-add_entry(new_db)
+add_entry(new_db, "cane", "dog")
 ```
 
-This will create a new file with the entry skeleton, which you can edit.
-The new `id` is automatically created for you based on the existing
-files.
+This will create a new entry. The new `id` is automatically created.
 
 To search your lexicon:
 
 ``` r
-db_path <- system.file("extdata/eleryon_lexadb", package = "lexaR")
+db_path <- system.file("extdata/eleryon.yaml", package = "lexaR")
 eleryon <- load_lexadb(db_path)
-#> ℹ Loading lexa database...
 eleryon
 #> 
 #> ── Database info ───────────────────────────────────────────────────────────────
-#> ◉ Name: eleryon
-#> ℹ Entries: 6 | Texts: 1
+#> ◉ Name: Eleryon
+#> ◉ Author: Stefano Coretta
+#> ℹ Entries: 6
 #> 
 #> ── Lexicon breakdown ──
 #> 
-#> ◉ Categories → Lexical: 6
-#> ◉ Morpheme types → Roots: 6
-#> ◉ POS → Adverbs: 1 | Nouns: 1 | Verbs: 4
+#> ◉ Word types → Stem: 6
+#> ◉ Word classes → Adverb: 1 | Noun: 1 | Verb: 4
 
-search_lexicon(eleryon, entry = "unullose")
+search_lexicon(eleryon, lexeme = "unullose")
 #> ✔ Found 1 entry.
-#> 
-#> ── Entry lx_000002 ─────────────────────────────────────────────────────────────
-#> unullose [unullose] verb (IV)
-#> 
-#> ── Senses ──
-#> 
-#> 1. to love
-#> 
-#> ── Grammatical info ──
-#> 
-#> Category: lexical
-#> Type: root
-#> 
-#> ── Allomorphs ──
-#> 
-#> • nul [nul]
-#> • unul [unul]
+#> • unullose to love [lx_000002]
 search_lexicon(eleryon, definition = "tomorrow")
 #> ✔ Found 1 entry.
-#> 
-#> ── Entry lx_000005 ─────────────────────────────────────────────────────────────
-#> chǭs [tʃɵːs] adverb
-#> 
-#> ── Senses ──
-#> 
-#> 1. tomorrow
-#> 
-#> ── Grammatical info ──
-#> 
-#> Category: lexical
-#> Type: root
-#> 
-#> ── Allomorphs ──
-#> 
-#> • chǭs [tʃɵːs]
-#> 
-#> ── Notes ──
-#> 
-#> • Note that in Eleryon this word means 'tomorrow' if used by noon, otherwise it
-#> means 'the day after tomorrow'.
+#> • chǭs tomorrow [lx_000005]
 ```
 
-You can also display texts, sentences and lexical entries!
+You can also display lexical entries!
 
 ``` r
-show_text(eleryon, 1)
-#> 
-#> ── Example sentences ───────────────────────────────────────────────────────────
-#> 
-#> ── st_000001 ──
-#> 
-#> Ęs ętsu urųrtō enēim kę̄syoh bhųl enēim āireᵃph likhpyūaq.
-#> And then I sat on a rock, while it was raining over me.
-#> 
-#> ── st_000002 ──
-#> 
-#> Ksǫnteziṇ gartosesī ōroi Vāisi su Meukha su vēsyēl selo ellāimōma enēim
-#> āireᵃph.
-#> With pleasure I tell you about the Sun, the Moon and the stars that are above
-#> us.
-
 show_entry(eleryon, 6)
 #> 
 #> ── Entry lx_000006 ─────────────────────────────────────────────────────────────
-#> urųrtose [uryrtose] verb (I)
+#> urųrtose /uryrtose/ verb (thematic and I)
 #> 
 #> ── Senses ──
 #> 
-#> 1. to sit
+#> 1.  to sit
 #> 
 #>           ── Examples
-#>           Ęs ętsu urųrtō enēim kę̄syoh bhųl enēim āireᵃph likhpyūaq.
-#>           [tx_000001:st_000001]
-#>           And then I sat on a rock, while it was raining over me.
-#> 
-#>           Ksǫnteziṇ gartosesī ōroi Vāisi su Meukha su vēsyēl selo ellāimōma
-#>           enēim āireᵃph. [tx_000001:st_000002]
-#>           With pleasure I tell you about the Sun, the Moon and the stars that
-#>           are above us.
-#> 
+#>           • Ęs ętsu urųrtō enēim kę̄syoh bhųl enēim āireᵃph likhpyūaq. And then
+#>           I sat on a rock, while it was raining over me.
 #> 
 #> ── Grammatical info ──
 #> 
-#> Category: lexical
-#> Type: root
-#> 
-#> ── Allomorphs ──
-#> 
-#> • ųrt [yrt]
-#> • urųrt [uryrt]
+#> Type: stem
+#> Class: verb
 ```
-
-To include interlinear glosses in HTML and LaTeX documents, check out
-the `vignette("interlinear-gloss")`.

@@ -1,0 +1,52 @@
+# Lexa Database Schema
+
+## General structure
+
+A Lexa database (`lexadb`) is a YAML file containing meta-data and
+lexical entries.
+
+## Lexicon entry schema
+
+The following is the currently supported schema for a lexical entry.
+
+``` yaml
+lx_00000n:
+  id: lx_00000n
+  lexeme: <string>
+  phonemic: <string>
+  phonetic: <string>
+  word_type: <root, stem, affix, clitic, particle, compound, phrase>
+  word_class: <string>
+  grammatical_features:
+    <feature_n>: <string>
+  etymology: <string>
+  loan_word: <string>
+  homophone: <numeric>
+  senses:
+    se_0n:
+      id: se_0n
+      gloss: <string>
+      definition: <string>
+      literal: <string>
+      scientific: <string>
+      usage: <string>
+      grammatical_features:
+        <feature_n>: <string>
+      examples:
+        ex_0n:
+          sentence: <string>
+          translation: <translation>
+          notes: <string>
+      etymology: <string>
+      notes: <string>
+  crossref: ["lx_00000n"]
+  variants: [<string>]
+  lists: [<string>]
+  semantics:
+    semantic_domain: ["sd_00000n"]
+    synonyms: ["lx_00000n"]
+    antonyms: ["lx_00000n"]
+  notes: [<string>]
+  date_created: <date>
+  date_modified: <date>
+```

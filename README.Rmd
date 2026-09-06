@@ -52,21 +52,16 @@ To create a new database:
 ``` r
 library(lexaR)
 
-create_lexadb(
-  parent = "./",
-  name = "new"
-)
+create_lexadb(name = "my_db")
 ```
 
-This will create a directory `new_lexadb/` in the parent directory (`./`).
+This will create a file `my_db.yaml` in the current directory.
 See `vignette("database-schema", package = "lexaR")` for details.
 
-The `lexicon/` folder is populated with a file with an entry skeleton you can manually edit.
-
-To create new entries you first need to load the database:
+To create new lexical entries you first need to load the database:
 
 ``` r
-new_db <- load_lexadb("./new_lexadb")
+new_db <- load_lexadb("my_db.yaml")
 
 new_db
 ```
@@ -74,30 +69,26 @@ new_db
 Now you can add a new entry with:
 
 ``` r
-add_entry(new_db)
+add_entry(new_db, "cane", "dog")
 ```
 
-This will create a new file with the entry skeleton, which you can edit.
-The new `id` is automatically created for you based on the existing files.
+This will create a new entry. The new `id` is automatically created.
 
 To search your lexicon:
 
 ```{r}
-db_path <- system.file("extdata/eleryon_lexadb", package = "lexaR")
+db_path <- system.file("extdata/eleryon.yaml", package = "lexaR")
 eleryon <- load_lexadb(db_path)
 eleryon
 
-search_lexicon(eleryon, entry = "unullose")
+search_lexicon(eleryon, lexeme = "unullose")
 search_lexicon(eleryon, definition = "tomorrow")
 ```
 
-You can also display texts, sentences and lexical entries!
+You can also display lexical entries!
 
 ```{r}
-show_text(eleryon, 1)
-
 show_entry(eleryon, 6)
 ```
 
-To include interlinear glosses in HTML and LaTeX documents, check out the `vignette("interlinear-gloss")`.
 
