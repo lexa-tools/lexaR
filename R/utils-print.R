@@ -189,7 +189,7 @@ print.lexalx <- function(x, ...) {
 #' Print method for list of entries
 #'
 #' Print method for the output of `search_lexicon()`, which returns an object
-#'    of class `lexalxs`.
+#'    of class `lexalxs` when `show_entry` is `TRUE`.
 #'
 #' @param x An object of class `lexalxs`.
 #' @param ... Arguments passed to print.
@@ -214,7 +214,7 @@ print.lexalxscompact <- function(x, ...) {
   purrr::walk(
     x,
     function(i) {
-      lexeme_line <- "{crayon::blue(i$lexeme)} {.emph {crayon::green(i$part_of_speech)}} {i$senses$se_01$definition} [{crayon::silver(i$id)}]"
+      lexeme_line <- "{crayon::blue(i$lexeme)} {.emph {crayon::green(i$word_class)}} {i$senses$se_01$definition} [{crayon::silver(i$id)}]"
       cli::cli_bullets(c("*" = lexeme_line))
     }
   )

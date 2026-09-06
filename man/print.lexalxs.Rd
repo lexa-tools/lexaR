@@ -16,5 +16,5 @@ Nothing. Used for its side effects.
 }
 \description{
 Print method for the output of \code{search_lexicon()}, which returns an object
-of class \code{lexalxs}.
+of class \code{lexalxs} when \code{show_entry} is \code{TRUE}.
 }
