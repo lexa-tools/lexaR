@@ -172,12 +172,7 @@ print.lexalx <- function(x, ...) {
 
   if (!is.null(x$etymology)) {
     cli::cli_h2("Etymology")
-    cli::cli_div(theme = list(span.etym = list(
-      `font-style` = "italic",
-      color = "blue"
-    )))
-    cli::cli_text(markdown_to_cli(x$etymology))
-    cli::cli_end()
+    cli::cli_text(x$etymology)
   }
 
   cli::cli_h2("Grammatical info")
@@ -223,13 +218,6 @@ print.lexalxscompact <- function(x, ...) {
       cli::cli_bullets(c("*" = lexeme_line))
     }
   )
-}
-
-markdown_to_cli <- function(x) {
-  x <- gsub("\\*\\*(.*?)\\*\\*", "{cli::style_bold('\\1')}", x)
-  x <- gsub("\\*(.*?)\\*", "{cli::style_italic('\\1')}", x)
-  x <- gsub("_(.*?)_", "{cli::style_italic('\\1')}", x)
-  x
 }
 
 orange <- crayon::make_style("orange")
